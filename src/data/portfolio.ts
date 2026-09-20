@@ -6,7 +6,21 @@ import lockragImage from "@/assets/lockrag.jpg";
 
 export const navItems = ["about", "experience", "skills", "projects", "contact"] as const;
 
-export const projects = [
+export interface Project {
+  number: string;
+  name: string;
+  category: string;
+  description: string;
+  features: readonly string[];
+  stack: readonly string[];
+  image: string;
+  alt: string;
+  href?: string;
+  label?: string;
+  note?: string;
+}
+
+export const projects: readonly Project[] = [
   {
     number: "01",
     name: "VIZHABOOK",
@@ -64,7 +78,7 @@ export const projects = [
     label: "View repository",
     note: "AI engineering project",
   },
-] as const;
+];
 
 export const skillGroups = [
   { label: "Frontend", items: ["React", "JavaScript", "HTML", "CSS"] },
