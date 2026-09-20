@@ -128,7 +128,13 @@ function StackWall() {
 }
 
 function GithubSection() {
-  return <section className="section github-section"><div><div className="section-index">06 / OPEN SOURCE</div><h2 className="display-heading">BUILT IN<br/>PUBLIC</h2><p>Experiments, utilities and product work — documented in code.</p><a className="text-link" href={GITHUB} target="_blank" rel="noreferrer">github.com/manojrajm <ArrowUpRight /></a></div><div className="code-window" aria-label="Visual code example"><div className="code-toolbar"><i/><i/><i/><span>product.ts</span></div><pre><code><span>const</span> product = build({`\n`}  frontend: <em>&quot;React&quot;</em>,{`\n`}  backend: <em>&quot;Node.js&quot;</em>,{`\n`}  database: <em>&quot;MSSQL&quot;</em>,{`\n`}  mindset: <em>&quot;problem solving&quot;</em>{`\n`}});</code></pre></div></section>;
+  const codeSample = `const product = build({
+  frontend: "React",
+  backend: "Node.js",
+  database: "MSSQL",
+  mindset: "problem solving"
+});`;
+  return <section className="section github-section"><div><div className="section-index">06 / OPEN SOURCE</div><h2 className="display-heading">BUILT IN<br/>PUBLIC</h2><p>Experiments, utilities and product work — documented in code.</p><a className="text-link" href={GITHUB} target="_blank" rel="noreferrer">github.com/manojrajm <ArrowUpRight /></a></div><div className="code-window" aria-label="Visual code example"><div className="code-toolbar"><i/><i/><i/><span>product.ts</span></div><pre><code>{codeSample}</code></pre></div></section>;
 }
 
 function Contact() {
