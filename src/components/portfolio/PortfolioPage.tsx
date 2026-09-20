@@ -49,7 +49,7 @@ function Cursor() {
   useEffect(() => {
     const move = (event: globalThis.MouseEvent) => {
       const target = (event.target as HTMLElement).closest<HTMLElement>("[data-cursor]");
-      setState({ x: event.clientX, y: event.clientY, label: target?.dataset.cursor ?? "" });
+      setState({ x: event.clientX, y: event.clientY, label: target?.dataset["cursor"] ?? "" });
     };
     window.addEventListener("mousemove", move);
     return () => window.removeEventListener("mousemove", move);
@@ -86,7 +86,7 @@ function Hero() {
   return <section id="top" className="hero" aria-labelledby="hero-title">
     <div className="hero-canvas" data-cursor="EXPLORE"><ClientOnly fallback={<div className="scene-fallback" />}><Suspense fallback={<div className="scene-fallback" />}><HeroScene reducedMotion={reduced} /></Suspense></ClientOnly></div>
     <div className="hero-vignette" />
-    <motion.div className="hero-copy" style={reduced ? undefined : { y, opacity }}>
+    <motion.div className="hero-copy" style={reduced ? {} : { y, opacity }}>
       <p className="eyebrow">The engineer / 2026</p>
       <h1 id="hero-title">I BUILD<br/><span>DIGITAL SYSTEMS.</span></h1>
       <p className="hero-lede">Full Stack Developer crafting scalable web applications, ERP platforms and SaaS products.</p>
