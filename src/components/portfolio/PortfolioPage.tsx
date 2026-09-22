@@ -41,7 +41,7 @@ function Loader() {
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, []);
-  return <AnimatePresence>{visible && <motion.div className="loader" initial={{ y: 0 }} exit={{ y: "-100%" }} transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}><div className="loader-mark">MR</div><div className="loader-name">MANOJRAJ <span>FULL STACK DEVELOPER</span></div><div className="loader-progress">{String(progress).padStart(3, "0")}%</div></motion.div>}</AnimatePresence>;
+  return <AnimatePresence>{visible && <motion.div className="loader" initial={{ y: 0 }} exit={{ y: "-100%" }} transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}><div className="loader-mark"><span className="brand-accent">M</span><span className="brand-accent">R</span></div><div className="loader-name"><span className="brand-accent">M</span><span className="name-white">ANOJ</span><span className="brand-accent">R</span><span className="name-white">AJ</span> <span>FULL STACK DEVELOPER &amp; LEARNING DEVOPS</span></div><div className="loader-progress">{String(progress).padStart(3, "0")}%</div></motion.div>}</AnimatePresence>;
 }
 
 function Cursor() {
@@ -67,7 +67,7 @@ function Navbar() {
   }, []);
   return <>
     <header className={`nav-shell ${scrolled ? "is-scrolled" : ""}`}>
-      <a className="brand" href="#top" aria-label="ManojRaj home">MANOJRAJ<span>.</span></a>
+      <a className="brand" href="#top" aria-label="MR home"><span className="brand-accent">M</span><span className="brand-accent">R</span><span>.</span></a>
       <nav className="desktop-nav" aria-label="Primary navigation">{navItems.map(item => <a key={item} href={`#${item}`}>{item}</a>)}</nav>
       <Button variant="ghost" size="icon" className="menu-button" onClick={() => setOpen(true)} aria-label="Open navigation"><Menu /></Button>
     </header>
@@ -83,18 +83,102 @@ function Hero() {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, .16], [0, 180]);
   const opacity = useTransform(scrollYProgress, [0, .12], [1, 0]);
-  return <section id="top" className="hero" aria-labelledby="hero-title">
-    <div className="hero-canvas" data-cursor="EXPLORE"><ClientOnly fallback={<div className="scene-fallback" />}><Suspense fallback={<div className="scene-fallback" />}><HeroScene reducedMotion={reduced} /></Suspense></ClientOnly></div>
-    <div className="hero-vignette" />
-    <motion.div className="hero-copy" style={reduced ? {} : { y, opacity }}>
-      <p className="eyebrow">The engineer / 2026</p>
-      <h1 id="hero-title">I BUILD<br/><span>DIGITAL SYSTEMS.</span></h1>
-      <p className="hero-lede">Full Stack Developer crafting scalable web applications, ERP platforms and SaaS products.</p>
-      <div className="hero-actions"><MagneticLink href="#projects">View my work <ArrowDown /></MagneticLink><MagneticLink href="#contact" variant="cinematicOutline">Let&apos;s connect <ArrowUpRight /></MagneticLink></div>
-    </motion.div>
-    <div className="hero-meta"><span>Coimbatore, India</span><span>Full Stack Developer</span><span>React • Node • MSSQL</span></div>
-    <a className="scroll-cue" href="#about">Scroll to explore <ArrowDown /></a>
-  </section>;
+
+  const stackCode = `const developer = {
+  name: "Manoj Raj",
+  role: "Full Stack & DevOps",
+  stack: ["React", "Node", "MSSQL"]
+};`;
+
+  return (
+    <section id="top" className="hero" aria-labelledby="hero-title">
+      <div className="hero-vignette" />
+      {/* Background Cyber Code Snippets */}
+      <div className="hero-bg-code code-top-right" aria-hidden="true">interface Pipeline &#123; stage: &apos;deploy&apos; &#125;</div>
+      <div className="hero-bg-code code-mid-right" aria-hidden="true">const client = new MSSQL.ConnectionPool()</div>
+      <div className="hero-bg-code code-lower-mid" aria-hidden="true">docker-compose up --build -d</div>
+      <div className="hero-bg-code code-bottom-right" aria-hidden="true">SELECT * FROM system_logs</div>
+
+      <motion.div className="hero-copy-grid" style={reduced ? {} : { y, opacity }}>
+        {/* Left Column: Information, Badges, Name, Actions, Code Card */}
+        <div className="hero-left-content">
+          <div className="status-badge">
+            <span className="status-dot-pulse" />
+            <span>AVAILABLE FOR SELECT PROJECTS</span>
+          </div>
+
+          <h1 id="hero-title" className="hero-main-name">
+            <span className="brand-accent">M</span><span className="name-white">ANOJ</span>{" "}
+            <span className="brand-accent">R</span><span className="name-white">AJ</span>
+          </h1>
+
+          <div className="hero-role-pill">
+            <span>FULL STACK DEVELOPER &amp; LEARNING DEVOPS</span>
+          </div>
+
+          <p className="hero-lede-desc">
+            Architecting high-availability web systems, scalable REST APIs, enterprise database schemas and cloud deployment pipelines.
+          </p>
+
+          <div className="hero-actions-row">
+            <MagneticLink href="#projects">View my work <ArrowDown /></MagneticLink>
+            <MagneticLink href="#contact" variant="cinematicOutline">Let&apos;s connect <ArrowUpRight /></MagneticLink>
+          </div>
+
+          {/* Clean stack.config.ts card that does NOT overlap text */}
+          <div className="hero-code-box" aria-label="Developer configuration snippet">
+            <div className="code-box-bar">
+              <div className="code-box-dots">
+                <span className="c-dot red" />
+                <span className="c-dot yellow" />
+                <span className="c-dot green" />
+              </div>
+              <span className="code-box-file">stack.config.ts</span>
+            </div>
+            <pre className="code-box-pre"><code>{stackCode}</code></pre>
+          </div>
+        </div>
+
+        {/* Right Column: 3D Stage & Right Stat Cards */}
+        <div className="hero-right-stage">
+          {/* Spacer allowing the 3D robot model to float visibly in the empty stage */}
+          <div className="hero-stage-spacer" />
+
+          {/* Right Metrics Cards */}
+          <div className="hero-stat-stack">
+            <div className="stat-pill-card">
+              <div className="stat-pill-head">
+                <span className="stat-val">99.9%</span>
+                <span className="stat-glow-dot" />
+              </div>
+              <span className="stat-caption">DEPLOYMENT UPTIME</span>
+            </div>
+
+            <div className="stat-pill-card">
+              <div className="stat-pill-head">
+                <span className="stat-val">5+</span>
+              </div>
+              <span className="stat-caption">ENTERPRISE ERP &amp; SAAS</span>
+            </div>
+
+            <div className="stat-pill-card">
+              <div className="stat-pill-head">
+                <span className="stat-badge-text">DEVOPS ENGINE</span>
+              </div>
+              <span className="stat-caption">CI/CD • NGINX • DOCKER</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      <div className="hero-meta">
+        <span>Coimbatore, Tamil Nadu</span>
+        <span>Full Stack Developer</span>
+        <span>React • Node • MSSQL • DevOps</span>
+      </div>
+      <a className="scroll-cue" href="#about">Scroll to explore <ArrowDown /></a>
+    </section>
+  );
 }
 
 function Marquee() {
@@ -111,7 +195,7 @@ function Experience() {
 
 function Skills() {
   const all = skillGroups.flatMap(group => group.items.map(item => ({ item, group: group.label })));
-  return <section id="skills" className="section skills-section"><div className="section-index">03 / CAPABILITIES</div><div className="skills-intro"><h2 className="display-heading">SYSTEM<br/>ARCHITECTURE</h2><p>A connected full-stack toolkit — from interface logic to production infrastructure.</p></div><div className="constellation" data-cursor="EXPLORE"><div className="constellation-core"><span>FULL STACK</span>MANOJRAJ</div>{all.map(({item, group}, i) => <button key={item} className="skill-node" style={{ "--i": i, "--total": all.length } as React.CSSProperties} aria-label={`${item}, ${group}`}><small>{group}</small>{item}</button>)}</div></section>;
+  return <section id="skills" className="section skills-section"><div className="section-index">03 / CAPABILITIES</div><div className="skills-intro"><h2 className="display-heading">SYSTEM<br/>ARCHITECTURE</h2><p>A connected full-stack toolkit — from interface logic to production infrastructure.</p></div><div className="constellation" data-cursor="EXPLORE"><div className="constellation-core"><span>FULL STACK</span><span className="brand-accent">M</span>ANOJ<span className="brand-accent">R</span>AJ</div>{all.map(({item, group}, i) => <button key={item} className="skill-node" style={{ "--i": i, "--total": all.length } as React.CSSProperties} aria-label={`${item}, ${group}`}><small>{group}</small>{item}</button>)}</div></section>;
 }
 
 function Projects() {
@@ -138,10 +222,11 @@ function GithubSection() {
 }
 
 function Contact() {
-  return <footer id="contact" className="contact-section"><div className="contact-orbit" aria-hidden="true"><i/><i/><i/></div><div className="contact-content"><div className="section-index">07 / CONTACT</div><h2>LET&apos;S BUILD<br/><span>SOMETHING.</span></h2><p>Have an idea, product or engineering problem worth solving?</p><div className="contact-links"><a href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin/> LinkedIn</a><a href={GITHUB} target="_blank" rel="noreferrer"><Github/> GitHub</a><a href={EMAIL}><Mail/> Email</a></div></div><div className="footer-line"><span>MANOJRAJ</span><span>FULL STACK DEVELOPER</span><span>© 2026</span></div></footer>;
+  return <footer id="contact" className="contact-section"><div className="contact-orbit" aria-hidden="true"><i/><i/><i/></div><div className="contact-content"><div className="section-index">07 / CONTACT</div><h2>LET&apos;S BUILD<br/><span>SOMETHING.</span></h2><p>Have an idea, product or engineering problem worth solving?</p><div className="contact-links"><a href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin/> LinkedIn</a><a href={GITHUB} target="_blank" rel="noreferrer"><Github/> GitHub</a><a href={EMAIL}><Mail/> Email</a></div></div><div className="footer-line"><span><span className="brand-accent">M</span>ANOJ<span className="brand-accent">R</span>AJ</span><span>FULL STACK DEVELOPER &amp; LEARNING DEVOPS</span><span>© 2026</span></div></footer>;
 }
 
 export default function PortfolioPage() {
+  const reduced = useReducedMotion() ?? false;
   useEffect(() => {
     let cleanup = () => {};
     void Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(([gsapModule, triggerModule]) => {
@@ -159,5 +244,30 @@ export default function PortfolioPage() {
     });
     return () => cleanup();
   }, []);
-  return <div className="portfolio"><Loader/><Cursor/><Navbar/><main><Hero/><Marquee/><About/><Experience/><Skills/><Projects/><Process/><StackWall/><GithubSection/></main><Contact/></div>;
+  return (
+    <div className="portfolio">
+      <div className="hero-canvas" data-cursor="EXPLORE">
+        <ClientOnly fallback={<div className="scene-fallback" />}>
+          <Suspense fallback={<div className="scene-fallback" />}>
+            <HeroScene reducedMotion={reduced} />
+          </Suspense>
+        </ClientOnly>
+      </div>
+      <Loader/>
+      <Cursor/>
+      <Navbar/>
+      <main>
+        <Hero/>
+        <Marquee/>
+        <About/>
+        <Experience/>
+        <Skills/>
+        <Projects/>
+        <Process/>
+        <StackWall/>
+        <GithubSection/>
+      </main>
+      <Contact/>
+    </div>
+  );
 }
