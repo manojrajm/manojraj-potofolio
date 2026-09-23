@@ -54,6 +54,39 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .loader-name span { display: block; margin-top: .35rem; color: var(--muted-foreground); font-size: .55rem; }
 .loader-progress { position: absolute; right: 2rem; bottom: 2rem; color: var(--muted-foreground); font-size: .72rem; }
 
+/* Minimalist 3D Asset Loading Pill */
+.asset-loader-badge {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 80;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.95rem;
+  background: color-mix(in oklab, var(--surface) 92%, transparent);
+  border: 1px solid color-mix(in oklab, var(--primary) 60%, var(--border));
+  border-radius: 999px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0 20px color-mix(in oklab, var(--primary) 25%, transparent);
+  pointer-events: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.asset-loader-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #8b5cf6;
+  box-shadow: 0 0 8px #8b5cf6;
+  animation: pulseDot 1.4s infinite;
+}
+.asset-loader-text {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #d8b4fe;
+}
+
 .nav-shell { position: fixed; z-index: 40; top: 0; left: 0; right: 0; height: 82px; padding: 0 clamp(1.25rem, 3vw, 3rem); display: flex; align-items: center; justify-content: space-between; transition: .35s ease; }
 .nav-shell.is-scrolled { top: 14px; left: 3vw; right: 3vw; height: 60px; padding-inline: 1.3rem; border: 1px solid var(--border); border-radius: 999px; background: color-mix(in oklab, var(--background) 72%, transparent); backdrop-filter: blur(18px); }
 .brand { font-size: .84rem; font-weight: 800; letter-spacing: .14em; }.brand span { color: var(--violet-soft); }

@@ -5,7 +5,9 @@ import { lazy, Suspense, useEffect, useRef, useState, type MouseEvent as ReactMo
 import { Button } from "@/components/ui/button";
 import { experiencePoints, navItems, projects, skillGroups } from "@/data/portfolio";
 
-const HeroScene = lazy(() => import("@/components/canvas/HeroScene"));
+import { AssetLoader3D } from "./AssetLoader3D";
+
+const PersistentExperience = lazy(() => import("@/three/Experience"));
 const GITHUB = "https://github.com/manojrajm";
 const LINKEDIN = "https://in.linkedin.com/in/manoj-raj-m-7b140621b";
 const EMAIL = "mailto:gauthamtamizha007@gmail.com";
@@ -249,10 +251,11 @@ export default function PortfolioPage() {
       <div className="hero-canvas" data-cursor="EXPLORE">
         <ClientOnly fallback={<div className="scene-fallback" />}>
           <Suspense fallback={<div className="scene-fallback" />}>
-            <HeroScene reducedMotion={reduced} />
+            <PersistentExperience reducedMotion={reduced} />
           </Suspense>
         </ClientOnly>
       </div>
+      <AssetLoader3D />
       <Loader/>
       <Cursor/>
       <Navbar/>
