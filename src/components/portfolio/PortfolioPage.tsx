@@ -253,7 +253,34 @@ function About() {
 }
 
 function Experience() {
-  return <section id="experience" className="section experience-section"><div className="section-index">02 / EXPERIENCE</div><h2 className="display-heading">EXPERIENCE</h2><div className="timeline"><div className="timeline-rail"><span /></div><article><div className="timeline-top"><p>Present</p><p>Coimbatore, Tamil Nadu</p></div><h3>Dyna4cast Technologies<br/><span>Private Limited</span></h3><p className="role">Full Stack Developer</p><div className="experience-body"><ul>{experiencePoints.map(point => <li key={point}>{point}</li>)}</ul><div className="tech-cloud">{["React.js","JavaScript","Node.js","Express.js","MSSQL","REST APIs","Nginx","GitHub Actions","PM2"].map(item => <span key={item}>{item}</span>)}</div></div></article></div></section>;
+  return (
+    <section id="experience" className="section experience-section">
+      <div className="section-index">02 / EXPERIENCE</div>
+      <div className="experience-grid">
+        <div className="experience-content">
+          <h2 className="exp-tech-heading exp-anim-text">
+            <span className="brand-accent">ENGINEERING</span> JOURNEY
+          </h2>
+          <div className="timeline exp-anim-text">
+            <div className="timeline-rail"><span /></div>
+            <article>
+              <div className="timeline-top">
+                <p>Present</p>
+                <p>Coimbatore, Tamil Nadu</p>
+              </div>
+              <h3>Dyna4cast Technologies<br/><span>Private Limited</span></h3>
+              <p className="role">Full Stack Developer</p>
+              <div className="experience-body">
+                <ul>{experiencePoints.map(point => <li key={point}>{point}</li>)}</ul>
+                <div className="tech-cloud">{["React.js","JavaScript","Node.js","Express.js","MSSQL","REST APIs","Nginx","GitHub Actions","PM2"].map(item => <span key={item}>{item}</span>)}</div>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div className="experience-stage-spacer" aria-hidden="true" />
+      </div>
+    </section>
+  );
 }
 
 function Skills() {
@@ -314,6 +341,25 @@ export default function PortfolioPage() {
             scrollTrigger: {
               trigger: ".about-copy",
               start: "top 82%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+
+        // Experience Section: Left-to-Right Slide & Fade-In with GSAP ScrollTrigger
+        gsap.fromTo(
+          ".exp-anim-text",
+          { opacity: 0, x: -85, filter: "blur(6px)" },
+          {
+            opacity: 1,
+            x: 0,
+            filter: "blur(0px)",
+            duration: 1.0,
+            stagger: 0.14,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: "#experience",
+              start: "top 80%",
               toggleActions: "play none none reverse",
             },
           }

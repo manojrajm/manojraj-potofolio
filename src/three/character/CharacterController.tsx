@@ -81,16 +81,17 @@ export function CharacterController({
       targetScale = isMobile ? 1.22 : 1.55;
     } else if (skillsTop > winH * 0.45) {
       // 3. EXPERIENCE SECTION:
-      // Transitions from LEFT to FAR RIGHT (+1.65) with 360-degree spin
+      // Transitions from LEFT to RIGHT (+1.48), standing in dedicated right stage column
       // Enters coding stance typing on floating holographic terminal
+      // Head lowered to -1.32 with scale 1.56 for clean headroom below floating navbar
       nextSection = "experience";
       nextAnim = "TECH_GESTURE";
       const progress = Math.min(1, Math.max(0, 1 - expTop / (winH * 0.45)));
-      targetX = isMobile ? 0 : THREE.MathUtils.lerp(-1.70, 1.65, progress);
-      targetY = isMobile ? -0.95 : THREE.MathUtils.lerp(-1.35, -1.02, progress);
+      targetX = isMobile ? 0 : THREE.MathUtils.lerp(-1.70, 1.48, progress);
+      targetY = isMobile ? -1.15 : THREE.MathUtils.lerp(-1.35, -1.32, progress);
       targetZ = isMobile ? -0.5 : 0.15;
       targetRotY = THREE.MathUtils.lerp(0.72, Math.PI * 2.0 - 0.35, progress);
-      targetScale = isMobile ? 1.3 : 1.78;
+      targetScale = isMobile ? 1.24 : 1.56;
     } else if (projectsTop > winH * 0.45) {
       // 4. SKILLS SECTION:
       // Glides from RIGHT to DEAD CENTER (0.0)
@@ -98,8 +99,8 @@ export function CharacterController({
       nextSection = "skills";
       nextAnim = "SKILLS_PRESENT";
       const progress = Math.min(1, Math.max(0, 1 - skillsTop / (winH * 0.45)));
-      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.65, 0.0, progress);
-      targetY = isMobile ? -1.05 : -1.15;
+      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.48, 0.0, progress);
+      targetY = isMobile ? -1.05 : THREE.MathUtils.lerp(-1.32, -1.15, progress);
       targetZ = isMobile ? -0.3 : 0.65;
       targetRotY = THREE.MathUtils.lerp(Math.PI * 2.0 - 0.35, Math.PI * 4.0, progress) + (pointer.x * 0.15);
       targetScale = isMobile ? 1.4 : 1.95;
