@@ -119,6 +119,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 /* Hero Big Name */
 .hero-main-name { margin: 1.2rem 0 0.6rem; font-family: var(--font-display); font-size: clamp(3.8rem, 8.5vw, 7.5rem); line-height: 0.9; letter-spacing: 0.02em; text-transform: uppercase; }
+.hero-main-name.particle-heading-wrapper { margin: 0.8rem 0 0.4rem; width: 100%; max-width: min(100%, 820px); height: clamp(80px, 12vw, 150px); position: relative; }
 .hero-main-name .brand-accent { color: #8b5cf6 !important; text-shadow: 0 0 40px color-mix(in oklab, #8b5cf6 55%, transparent); }
 .hero-main-name .name-white { color: #ffffff !important; }
 

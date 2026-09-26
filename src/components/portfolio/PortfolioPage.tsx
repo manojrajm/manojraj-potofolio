@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { experiencePoints, navItems, projects, skillGroups } from "@/data/portfolio";
 
 import { AssetLoader3D } from "./AssetLoader3D";
+import { ParticleText } from "./ParticleText";
 
 const PersistentExperience = lazy(() => import("@/three/Experience"));
 const GITHUB = "https://github.com/manojrajm";
@@ -109,9 +110,26 @@ function Hero() {
             <span>AVAILABLE FOR SELECT PROJECTS</span>
           </div>
 
-          <h1 id="hero-title" className="hero-main-name">
-            <span className="brand-accent">M</span><span className="name-white">ANOJ</span>{" "}
-            <span className="brand-accent">R</span><span className="name-white">AJ</span>
+          <h1 id="hero-title" className="hero-main-name particle-heading-wrapper" aria-label="MANOJ RAJ">
+            <ParticleText
+              text="MANOJ RAJ"
+              particleSize={2.1}
+              density={3.6}
+              color="#ffffff"
+              highlightColor="#8b5cf6"
+              scatter={180}
+              gatherDuration={1500}
+              stagger={380}
+              pointerRepel={45}
+              repelRadius={120}
+              idleDrift={0.65}
+              trigger="hover"
+              fontSize="clamp(3.8rem, 8.5vw, 7.5rem)"
+              fontWeight={900}
+              fontFamily='"Archivo Black", sans-serif'
+              align="left"
+              glow={true}
+            />
           </h1>
 
           <div className="hero-role-pill">
