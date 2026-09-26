@@ -68,16 +68,17 @@ export function CharacterController({
     } else if (expTop > winH * 0.45) {
       // 2. ABOUT SECTION:
       // User Request: In about page look right side and raise the hand to placed the direction like visit the about content!
-      // Character moves to FAR LEFT (-1.75), rotates right (+0.75 rad / ~43 deg) facing the About Me text,
+      // Character moves to FAR LEFT (-1.70), rotates right (+0.72 rad / ~41 deg) facing the About Me text,
       // and triggers the ABOUT_POINT animation with right arm raised gesturing toward the content!
+      // Head lowered to -1.35 with scale 1.52 to ensure ~110px headroom completely below the floating navbar.
       nextSection = "about";
       nextAnim = "ABOUT_POINT";
       const progress = Math.min(1, Math.max(0, 1 - aboutTop / (winH * 0.45)));
-      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.45, -1.75, progress);
-      targetY = isMobile ? -0.95 : THREE.MathUtils.lerp(-1.05, -1.0, progress);
+      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.45, -1.70, progress);
+      targetY = isMobile ? -1.15 : THREE.MathUtils.lerp(-1.05, -1.35, progress);
       targetZ = isMobile ? -0.4 : 0.35;
       targetRotY = THREE.MathUtils.lerp(-0.38, 0.72, progress) + (pointer.x * 0.12);
-      targetScale = isMobile ? 1.35 : 1.8;
+      targetScale = isMobile ? 1.22 : 1.55;
     } else if (skillsTop > winH * 0.45) {
       // 3. EXPERIENCE SECTION:
       // Transitions from LEFT to FAR RIGHT (+1.65) with 360-degree spin
@@ -85,8 +86,8 @@ export function CharacterController({
       nextSection = "experience";
       nextAnim = "TECH_GESTURE";
       const progress = Math.min(1, Math.max(0, 1 - expTop / (winH * 0.45)));
-      targetX = isMobile ? 0 : THREE.MathUtils.lerp(-1.75, 1.65, progress);
-      targetY = isMobile ? -0.95 : -1.02;
+      targetX = isMobile ? 0 : THREE.MathUtils.lerp(-1.70, 1.65, progress);
+      targetY = isMobile ? -0.95 : THREE.MathUtils.lerp(-1.35, -1.02, progress);
       targetZ = isMobile ? -0.5 : 0.15;
       targetRotY = THREE.MathUtils.lerp(0.72, Math.PI * 2.0 - 0.35, progress);
       targetScale = isMobile ? 1.3 : 1.78;

@@ -211,7 +211,45 @@ function Marquee() {
 }
 
 function About() {
-  return <section id="about" className="section about-section"><div className="section-index">01 / ABOUT</div><div className="about-grid"><h2 className="display-heading reveal-text">ABOUT<br/>ME</h2><div className="about-copy"><p>I’m Manoj Raj, a Full Stack Developer focused on building practical, scalable software products. I work across modern frontend interfaces, backend APIs, databases and deployment workflows — turning business processes into reliable digital systems.</p><p>My experience includes building ERP workflows, SaaS products, real-time interfaces and database-backed applications using React, Node.js, Express.js and Microsoft SQL Server.</p><dl className="facts"><div><dt>Based in</dt><dd>Coimbatore, Tamil Nadu</dd></div><div><dt>Education</dt><dd>B.Tech / B.E. Information Technology — 2024</dd></div><div><dt>Currently</dt><dd>Dyna4cast Technologies</dd></div></dl></div><div className="glass-cube" aria-hidden="true"><div>REACT</div><div>NODE</div><div>SQL</div><div>API</div></div></div></section>;
+  return (
+    <section id="about" className="section about-section">
+      <div className="section-index">01 / ABOUT</div>
+      <div className="about-grid">
+        <div className="about-stage-spacer" aria-hidden="true" />
+        <div className="about-copy">
+          <h2 className="about-tech-heading about-anim-text">
+            <span className="brand-accent">BEHIND</span> THE CODE
+          </h2>
+          <p className="about-anim-text">
+            I’m Manoj Raj, a Full Stack Developer focused on building practical, scalable software products. I work across modern frontend interfaces, backend APIs, databases and deployment workflows — turning business processes into reliable digital systems.
+          </p>
+          <p className="about-anim-text">
+            My experience includes building ERP workflows, SaaS products, real-time interfaces and database-backed applications using React, Node.js, Express.js and Microsoft SQL Server.
+          </p>
+          <dl className="facts about-anim-text">
+            <div>
+              <dt>Based in</dt>
+              <dd>Coimbatore, Tamil Nadu</dd>
+            </div>
+            <div>
+              <dt>Education</dt>
+              <dd>B.Tech / B.E. Information Technology — 2024</dd>
+            </div>
+            <div>
+              <dt>Currently</dt>
+              <dd>Dyna4cast Technologies</dd>
+            </div>
+          </dl>
+        </div>
+        <div className="glass-cube" aria-hidden="true">
+          <div>REACT</div>
+          <div>NODE</div>
+          <div>SQL</div>
+          <div>API</div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function Experience() {
@@ -261,10 +299,33 @@ export default function PortfolioPage() {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const ctx = gsap.context(() => {
         gsap.utils.toArray<HTMLElement>(".reveal-text, .section-index, .display-heading").forEach(el => gsap.from(el, { opacity: 0, y: 50, duration: .9, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%" } }));
+        
+        // About Section: Left-to-Right Slide & Fade-In with GSAP ScrollTrigger
+        gsap.fromTo(
+          ".about-anim-text",
+          { opacity: 0, x: -85, filter: "blur(6px)" },
+          {
+            opacity: 1,
+            x: 0,
+            filter: "blur(0px)",
+            duration: 1.0,
+            stagger: 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".about-copy",
+              start: "top 82%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+
         gsap.utils.toArray<HTMLElement>(".stack-wall div").forEach((el, i) => gsap.fromTo(el, { xPercent: i % 2 ? 18 : -18, filter: "blur(8px)" }, { xPercent: 0, filter: "blur(0px)", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom center", scrub: 1 } }));
         gsap.to(".marquee-forward span", { xPercent: -18, ease: "none", scrollTrigger: { trigger: ".marquee-section", scrub: 1 } });
         gsap.fromTo(".marquee-reverse span", { xPercent: -18 }, { xPercent: 0, ease: "none", scrollTrigger: { trigger: ".marquee-section", scrub: 1 } });
       });
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 250);
       cleanup = () => ctx.revert();
     });
     return () => cleanup();
