@@ -1,6 +1,6 @@
 import { ClientOnly } from "@tanstack/react-router";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, ArrowUpRight, Github, Linkedin, Mail, Menu, X } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Database, Github, Layers, Linkedin, Mail, Menu, Server, X } from "lucide-react";
 import { lazy, Suspense, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { experiencePoints, navItems, projects, skillGroups } from "@/data/portfolio";
@@ -252,6 +252,33 @@ function About() {
   );
 }
 
+const experiencePillars = [
+  {
+    icon: Layers,
+    title: "Enterprise ERP Workflows",
+    badge: "CORE ARCHITECTURE",
+    desc: "Architecting enterprise ERP business workflows, complex data grids, interactive CRUD screens, and role-based automation.",
+    chips: ["React.js", "Component Architecture", "ERP Logic"],
+    accent: "#8b5cf6"
+  },
+  {
+    icon: Database,
+    title: "Full-Stack API Engineering",
+    badge: "DATA & APIS",
+    desc: "Building scalable Node.js & Express RESTful APIs, optimizing relational schemas, stored procedures, and queries in Microsoft SQL Server.",
+    chips: ["Node.js", "Express.js", "MSSQL", "REST APIs"],
+    accent: "#06b6d4"
+  },
+  {
+    icon: Server,
+    title: "Production CI/CD & DevOps",
+    badge: "DEPLOYMENT & OPS",
+    desc: "Deploying high-reliability systems with Nginx reverse proxy, PM2 process clustering, and automated GitHub Actions CI/CD workflows.",
+    chips: ["Nginx", "PM2", "GitHub Actions", "Zero Downtime"],
+    accent: "#10b981"
+  }
+];
+
 function Experience() {
   return (
     <section id="experience" className="section experience-section">
@@ -261,20 +288,65 @@ function Experience() {
           <h2 className="exp-tech-heading exp-anim-text">
             <span className="brand-accent">ENGINEERING</span> JOURNEY
           </h2>
-          <div className="timeline exp-anim-text">
-            <div className="timeline-rail"><span /></div>
-            <article>
-              <div className="timeline-top">
-                <p>Present</p>
-                <p>Coimbatore, Tamil Nadu</p>
+          
+          <div className="experience-bento-hub exp-anim-text">
+            {/* Top Telemetry Bar */}
+            <div className="bento-telemetry-bar">
+              <div className="bento-status-pill">
+                <span className="bento-pulse-dot" />
+                <span>ACTIVE ROLE • DYNA4CAST TECHNOLOGIES</span>
               </div>
-              <h3>Dyna4cast Technologies<br/><span>Private Limited</span></h3>
-              <p className="role">Full Stack Developer</p>
-              <div className="experience-body">
-                <ul>{experiencePoints.map(point => <li key={point}>{point}</li>)}</ul>
-                <div className="tech-cloud">{["React.js","JavaScript","Node.js","Express.js","MSSQL","REST APIs","Nginx","GitHub Actions","PM2"].map(item => <span key={item}>{item}</span>)}</div>
+              <div className="bento-meta-pill">
+                <span>2024 — PRESENT • COIMBATORE, TN</span>
               </div>
-            </article>
+            </div>
+
+            {/* Company & Role Header */}
+            <div className="bento-header-info">
+              <div className="bento-title-row">
+                <h3 className="bento-company-name">
+                  Dyna4cast Technologies <span className="bento-pvt-tag">Private Limited</span>
+                </h3>
+                <span className="bento-role-badge">FULL STACK DEVELOPER</span>
+              </div>
+              <p className="bento-lede-summary">
+                Leading the engineering of production enterprise ERP products, full-stack application workflows, database-backed APIs, and deployment automation.
+              </p>
+            </div>
+
+            {/* 3 Modular Workstream Capability Cards */}
+            <div className="bento-pillars-grid">
+              {experiencePillars.map((pillar) => {
+                const IconComponent = pillar.icon;
+                return (
+                  <div key={pillar.title} className="bento-pillar-card" style={{ "--pillar-accent": pillar.accent } as React.CSSProperties}>
+                    <div className="pillar-header">
+                      <div className="pillar-icon-box">
+                        <IconComponent className="pillar-icon" />
+                      </div>
+                      <span className="pillar-badge">{pillar.badge}</span>
+                    </div>
+                    <h4 className="pillar-title">{pillar.title}</h4>
+                    <p className="pillar-desc">{pillar.desc}</p>
+                    <div className="pillar-chips-wrap">
+                      {pillar.chips.map(chip => (
+                        <span key={chip} className="pillar-chip">{chip}</span>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Live Tech Stack Ribbon */}
+            <div className="bento-stack-ribbon">
+              <span className="ribbon-label">PRODUCTION STACK</span>
+              <div className="ribbon-chips">
+                {["React.js", "JavaScript", "Node.js", "Express.js", "MSSQL", "REST APIs", "Nginx", "GitHub Actions", "PM2"].map(tech => (
+                  <span key={tech} className="ribbon-chip">{tech}</span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
         <div className="experience-stage-spacer" aria-hidden="true" />
@@ -355,11 +427,30 @@ export default function PortfolioPage() {
             x: 0,
             filter: "blur(0px)",
             duration: 1.0,
-            stagger: 0.14,
+            stagger: 0.12,
             ease: "power3.out",
             scrollTrigger: {
               trigger: "#experience",
-              start: "top 80%",
+              start: "top 82%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+
+        // Bento Pillar Cards 3D Perspective Lift
+        gsap.fromTo(
+          ".bento-pillar-card",
+          { opacity: 0, y: 30, scale: 0.96 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: ".experience-bento-hub",
+              start: "top 85%",
               toggleActions: "play none none reverse",
             },
           }

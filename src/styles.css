@@ -177,14 +177,247 @@ main { position: relative; z-index: 2; }
 .glass-cube { position: absolute; left: 8%; top: 58%; width: 170px; aspect-ratio: 1; border: 1px solid color-mix(in oklab, var(--primary) 65%, transparent); transform: rotate(18deg); box-shadow: inset 0 0 60px color-mix(in oklab, var(--primary) 12%, transparent), var(--shadow-glow); opacity: .65; animation: cubeFloat 7s ease-in-out infinite; }.glass-cube div { position: absolute; padding: .3rem; color: var(--metal); font-size: .56rem; letter-spacing: .12em; }.glass-cube div:nth-child(1){top:10%;left:10%}.glass-cube div:nth-child(2){top:12%;right:8%}.glass-cube div:nth-child(3){bottom:10%;left:12%}.glass-cube div:nth-child(4){bottom:12%;right:10%}
 
 .experience-section { border-top: 1px solid var(--border); }
-.experience-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 4rem; align-items: start; }
+.experience-grid { display: grid; grid-template-columns: 1.22fr 0.78fr; gap: 3.5rem; align-items: start; }
 .experience-content { width: 100%; }
-.experience-stage-spacer { min-height: 480px; pointer-events: none; }
-.exp-tech-heading { margin: 1.4rem 0 3rem; font-family: var(--font-display); font-size: clamp(2.4rem, 4.5vw, 4.2rem); line-height: 0.95; letter-spacing: 0.02em; text-transform: uppercase; color: var(--foreground); }
+.experience-stage-spacer { min-height: 540px; pointer-events: none; }
+.exp-tech-heading { margin: 1.4rem 0 2.2rem; font-family: var(--font-display); font-size: clamp(2.4rem, 4.5vw, 4.2rem); line-height: 0.95; letter-spacing: 0.02em; text-transform: uppercase; color: var(--foreground); }
 .exp-tech-heading .brand-accent { color: #8b5cf6 !important; text-shadow: 0 0 35px color-mix(in oklab, #8b5cf6 55%, transparent); }
 .exp-anim-text { will-change: transform, opacity, filter; }
-.timeline { display: grid; grid-template-columns: 4px 1fr; gap: 2.5rem; max-width: 100%; }
-.timeline-rail { background: var(--border); position: relative; }.timeline-rail span { position: sticky; top: 20%; display: block; width: 4px; height: 28vh; background: var(--primary); box-shadow: var(--shadow-glow); }.timeline article { padding: 1rem 0 2rem; }.timeline-top { display: flex; justify-content: space-between; color: var(--muted-foreground); font-size: .65rem; text-transform: uppercase; letter-spacing: .12em; }.timeline h3 { margin: 2rem 0 .5rem; font-size: clamp(2rem, 5vw, 5.5rem); line-height: 1; }.timeline h3 span { color: var(--muted-foreground); }.role { color: var(--violet-soft); font-size: 1rem; text-transform: uppercase; letter-spacing: .12em; }.experience-body { display: grid; grid-template-columns: 1.35fr 1fr; gap: 4rem; margin-top: 4rem; }.experience-body ul { padding: 0; list-style: none; }.experience-body li { padding: 1rem 0; border-bottom: 1px solid var(--border); color: var(--muted-foreground); }.experience-body li::before { content: "↳"; margin-right: .8rem; color: var(--primary); }.tech-cloud { display: flex; flex-wrap: wrap; align-content: start; gap: .6rem; }.tech-cloud span, .stack-list span { padding: .55rem .8rem; border: 1px solid var(--border); border-radius: 999px; color: var(--muted-foreground); font-size: .65rem; text-transform: uppercase; }
+
+/* Pro-Level Experience Bento Mission Control Hub */
+.experience-bento-hub {
+  position: relative;
+  background: color-mix(in oklab, var(--card) 80%, transparent);
+  border: 1px solid color-mix(in oklab, #8b5cf6 35%, var(--border));
+  border-radius: 20px;
+  padding: clamp(1.5rem, 2.5vw, 2.4rem);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), 0 0 40px color-mix(in oklab, #8b5cf6 14%, transparent);
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.experience-bento-hub::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, #8b5cf6 65%, transparent), transparent);
+}
+
+/* Telemetry Header Bar */
+.bento-telemetry-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding-bottom: 1.4rem;
+  margin-bottom: 1.6rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+}
+.bento-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.42rem 0.95rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, #10b981 12%, transparent);
+  border: 1px solid color-mix(in oklab, #10b981 45%, var(--border));
+  box-shadow: 0 0 16px color-mix(in oklab, #10b981 18%, transparent);
+  font-family: ui-monospace, monospace;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #34d399;
+}
+.bento-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulseDot 1.8s infinite;
+}
+.bento-meta-pill {
+  font-family: ui-monospace, monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--muted-foreground);
+}
+
+/* Company Header */
+.bento-header-info {
+  margin-bottom: 2rem;
+}
+.bento-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+.bento-company-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  line-height: 1.05;
+  color: var(--foreground);
+  letter-spacing: 0.01em;
+}
+.bento-pvt-tag {
+  color: var(--muted-foreground);
+  font-size: 0.55em;
+  font-weight: 400;
+}
+.bento-role-badge {
+  display: inline-flex;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, #8b5cf6 15%, transparent);
+  border: 1px solid color-mix(in oklab, #8b5cf6 45%, var(--border));
+  color: #d8b4fe;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+.bento-lede-summary {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: clamp(0.95rem, 1.2vw, 1.12rem);
+  line-height: 1.65;
+  max-width: 680px;
+}
+
+/* 3 Modular Bento Pillar Cards */
+.bento-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+.bento-pillar-card {
+  position: relative;
+  padding: 1.4rem;
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--surface) 65%, transparent);
+  border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  backdrop-filter: blur(14px);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+.bento-pillar-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in oklab, var(--pillar-accent, #8b5cf6) 65%, var(--border));
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 25px color-mix(in oklab, var(--pillar-accent, #8b5cf6) 20%, transparent);
+}
+.pillar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.pillar-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: color-mix(in oklab, var(--pillar-accent, #8b5cf6) 18%, transparent);
+  border: 1px solid color-mix(in oklab, var(--pillar-accent, #8b5cf6) 40%, transparent);
+  display: grid;
+  place-items: center;
+  color: var(--pillar-accent, #8b5cf6);
+}
+.pillar-icon {
+  width: 18px;
+  height: 18px;
+}
+.pillar-badge {
+  font-family: ui-monospace, monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--pillar-accent, #8b5cf6);
+}
+.pillar-title {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.4vw, 1.35rem);
+  line-height: 1.2;
+  color: var(--foreground);
+}
+.pillar-desc {
+  margin: 0 0 1.2rem;
+  color: var(--muted-foreground);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+.pillar-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+.pillar-chip {
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--surface) 90%, transparent);
+  border: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+  color: #cbd5e1;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: border-color 0.2s, color 0.2s;
+}
+.bento-pillar-card:hover .pillar-chip {
+  border-color: color-mix(in oklab, var(--pillar-accent, #8b5cf6) 40%, var(--border));
+}
+
+/* Production Stack Ribbon */
+.bento-stack-ribbon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+}
+.ribbon-label {
+  font-family: ui-monospace, monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--muted-foreground);
+}
+.ribbon-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.ribbon-chip {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--surface) 95%, transparent);
+  border: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.2s ease;
+}
+.ribbon-chip:hover {
+  border-color: #8b5cf6;
+  color: #d8b4fe;
+  transform: translateY(-1px);
+  box-shadow: 0 0 10px color-mix(in oklab, #8b5cf6 30%, transparent);
+}
 
 .skills-section { min-height: 110vh; }.skills-intro { display: flex; justify-content: space-between; align-items: end; }.skills-intro p { max-width: 380px; color: var(--muted-foreground); line-height: 1.7; }.constellation { position: relative; width: min(900px, 88vw); height: min(720px, 80vw); min-height: 520px; margin: 2rem auto; border-radius: 50%; background: radial-gradient(circle, color-mix(in oklab, var(--primary) 13%, transparent), transparent 55%); }.constellation::before { content:""; position:absolute; inset:12%; border:1px solid var(--border); border-radius:50%; }.constellation-core { position: absolute; left: 50%; top: 50%; width: 180px; aspect-ratio: 1; translate: -50% -50%; display: grid; place-content: center; text-align: center; border: 1px solid var(--primary); border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-glow); font: 400 1.15rem var(--font-display); }.constellation-core span { display: block; margin-bottom: .4rem; color: var(--muted-foreground); font: 600 .5rem var(--font-sans); letter-spacing: .18em; }.skill-node { --angle: calc(360deg / var(--total) * var(--i)); position: absolute; left: calc(50% + cos(var(--angle)) * 42%); top: calc(50% + sin(var(--angle)) * 42%); translate: -50% -50%; min-width: 86px; padding: .65rem .8rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); color: var(--foreground); backdrop-filter: blur(12px); font: 600 .68rem var(--font-sans); cursor: crosshair; transition: .25s; }.skill-node:hover,.skill-node:focus-visible { border-color: var(--primary); transform: scale(1.12); box-shadow: var(--shadow-glow); outline: none; }.skill-node small { display: block; margin-bottom: .18rem; color: var(--muted-foreground); font-size: .45rem; text-transform: uppercase; letter-spacing: .08em; }
 
