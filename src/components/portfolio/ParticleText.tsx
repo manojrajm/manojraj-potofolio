@@ -7,10 +7,16 @@ interface RgbColor {
   b: number;
 }
 
+export interface TextSegment {
+  text: string;
+  isAccent?: boolean;
+}
+
 interface ParticleTarget {
   x: number;
   y: number;
   alpha: number;
+  isAccent: boolean;
 }
 
 interface Particle {
@@ -22,6 +28,7 @@ interface Particle {
   targetY: number;
   size: number;
   color: string;
+  isAccent: boolean;
   seed: number;
   depth: number;
   delay: number;
@@ -29,6 +36,7 @@ interface Particle {
 
 export interface ParticleTextProps {
   text?: string;
+  segments?: TextSegment[];
   particleSize?: number;
   density?: number;
   color?: string;
@@ -58,14 +66,6 @@ const hexToRgb = (hex: string): RgbColor | null => {
     b: parseInt(clean.slice(4, 6), 16),
   };
 };
-
-const mixRgb = (from: RgbColor, to: RgbColor, amount: number): RgbColor => ({
-  r: Math.round(from.r + (to.r - from.r) * amount),
-  g: Math.round(from.g + (to.g - from.g) * amount),
-  b: Math.round(from.b + (to.b - from.b) * amount),
-});
-
-const rgbToCss = (rgb: RgbColor): string => `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
 
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
@@ -122,8 +122,9 @@ const waitForFonts = async (font: string): Promise<void> => {
 
 export const ParticleText: React.FC<ParticleTextProps> = ({
   text = "MANOJ RAJ",
+  segments,
   particleSize = 2.1,
-  density = 3.8,
+  density = 3.6,
   color = "#ffffff",
   highlightColor = "#8b5cf6",
   scatter = 180,
@@ -133,9 +134,9 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
   repelRadius = 120,
   idleDrift = 0.65,
   trigger = "hover",
-  fontSize = "clamp(3.6rem, 8vw, 7.2rem)",
+  fontSize = "clamp(3.8rem, 8.5vw, 7.5rem)",
   fontWeight = 900,
-  fontFamily = "inherit",
+  fontFamily = '"Archivo Black", sans-serif',
   glow = true,
   align = "left",
   className = "",
@@ -143,6 +144,11 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const fullContent =
+    segments && segments.length > 0
+      ? segments.map((s) => s.text).join("")
+      : String(text || " ");
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
@@ -220,13 +226,6 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
     const render = (now: number) => {
       ctx.clearRect(0, 0, width, height);
 
-      if (glow && !reducedMotion) {
-        ctx.shadowBlur = particleSize * 3.5;
-        ctx.shadowColor = highlightColor;
-      } else {
-        ctx.shadowBlur = 0;
-      }
-
       pointer.smoothX += (pointer.x - pointer.smoothX) * 0.18;
       pointer.smoothY += (pointer.y - pointer.smoothY) * 0.18;
 
@@ -277,6 +276,18 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
         const follow = reducedMotion ? 1 : 0.22;
         particle.x += (baseX - particle.x) * follow;
         particle.y += (baseY - particle.y) * follow;
+
+        if (glow && !reducedMotion) {
+          if (particle.isAccent) {
+            ctx.shadowBlur = particleSize * 4.5;
+            ctx.shadowColor = highlightColor;
+          } else {
+            ctx.shadowBlur = particleSize * 1.5;
+            ctx.shadowColor = "rgba(255, 255, 255, 0.4)";
+          }
+        } else {
+          ctx.shadowBlur = 0;
+        }
 
         ctx.globalAlpha = clamp(0.35 + progress * 0.65, 0, 1);
         drawParticle(particle);
@@ -329,8 +340,8 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       const offCtx = offscreen.getContext("2d", { willReadFrequently: true });
       if (!offCtx) return;
 
-      const content = String(text || " ");
-      const maxTextWidth = width * 0.95;
+      const content = fullContent;
+      const maxTextWidth = width * 0.96;
       offCtx.font = font;
       let metrics = offCtx.measureText(content);
       const measuredWidth = Math.max(1, metrics.width);
@@ -361,8 +372,20 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       offCtx.font = font;
       offCtx.textAlign = "left";
       offCtx.textBaseline = "alphabetic";
-      offCtx.fillStyle = "#ffffff";
-      offCtx.fillText(content, padding - left, padding + ascent);
+
+      // Dual-Channel Chroma Tagging:
+      // If segments provided (e.g. 'M', 'ANOJ ', 'R', 'AJ'), draw accent letters in pure magenta-red #ff0055, base in white #ffffff
+      if (segments && segments.length > 0) {
+        let currentX = padding - left;
+        segments.forEach((seg) => {
+          offCtx.fillStyle = seg.isAccent ? "#ff0055" : "#ffffff";
+          offCtx.fillText(seg.text, currentX, padding + ascent);
+          currentX += offCtx.measureText(seg.text).width;
+        });
+      } else {
+        offCtx.fillStyle = "#ffffff";
+        offCtx.fillText(content, padding - left, padding + ascent);
+      }
 
       const imageData = offCtx.getImageData(
         0,
@@ -384,41 +407,39 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
 
       for (let y = 0; y < offscreen.height; y += step) {
         for (let x = 0; x < offscreen.width; x += step) {
-          const alpha = imageData.data[(y * offscreen.width + x) * 4 + 3];
+          const idx = (y * offscreen.width + x) * 4;
+          const r = imageData.data[idx];
+          const g = imageData.data[idx + 1];
+          const alpha = imageData.data[idx + 3];
           if (alpha > 40) {
+            // Chroma Tag: Red > 180 and Green < 120 denotes Accent ('M' or 'R')
+            const isAccent = r > 180 && g < 120;
             targets.push({
               x: originX + x,
               y: originY + y,
               alpha: alpha / 255,
+              isAccent,
             });
           }
         }
       }
 
       const maxParticles = Math.max(
-        900,
-        Math.min(5200, Math.floor((width * height) / 80))
+        1200,
+        Math.min(5200, Math.floor((width * height) / 70))
       );
       const stride = Math.max(1, Math.ceil(targets.length / maxParticles));
-      const baseRgb = hexToRgb(color);
-      const highlightRgb = hexToRgb(highlightColor);
       const selected = targets.filter((_, index) => index % stride === 0);
 
       particles = selected.map((target, index) => {
         const seed = ((index * 9301 + 49297) % 233280) / 233280;
         const depth = 0.45 + (((index * 233 + 97) % 1000) / 1000) * 0.9;
-        const blend =
-          baseRgb && highlightRgb
-            ? clamp(
-                target.x / Math.max(1, offscreen.width) + (seed - 0.5) * 0.35,
-                0,
-                1
-              )
-            : 0;
-        const particleColor =
-          baseRgb && highlightRgb
-            ? rgbToCss(mixRgb(baseRgb, highlightRgb, blend))
-            : color;
+
+        // Distinct color assignment:
+        // Accent letters ('M' and 'R') get vibrant electric violet highlightColor (#8b5cf6)
+        // Base letters ('ANOJ' and 'AJ') get crisp diamond white (#ffffff)
+        const particleColor = target.isAccent ? highlightColor : color;
+
         const angle = seed * Math.PI * 2;
         const distance = (reducedMotion ? 0 : scatter) * (0.35 + depth * 0.75);
         const startX =
@@ -437,8 +458,11 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
           startY,
           targetX: target.x,
           targetY: target.y,
-          size: Math.max(0.6, particleSize * (0.75 + target.alpha * 0.45)),
+          size: target.isAccent
+            ? Math.max(0.75, particleSize * 1.12 * (0.75 + target.alpha * 0.45))
+            : Math.max(0.6, particleSize * (0.75 + target.alpha * 0.45)),
           color: particleColor,
+          isAccent: target.isAccent,
           seed,
           depth,
           delay: seed * stagger,
@@ -494,7 +518,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
     const reduceMotionQuery = window.matchMedia?.(
       "(prefers-reduced-motion: reduce)"
     );
-    const handleReduceMotionChange = (event: MediaQueryListEvent) => {
+    const handleReduceMotionChange = () => {
       sampleText();
     };
 
@@ -525,6 +549,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
     };
   }, [
     text,
+    segments,
     particleSize,
     density,
     color,
@@ -541,6 +566,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
     fontFamily,
     glow,
     align,
+    fullContent,
   ]);
 
   return (
@@ -548,14 +574,14 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       ref={containerRef}
       className={`particle-text ${className}`}
       style={style}
-      aria-label={text}
+      aria-label={fullContent}
     >
       <canvas
         ref={canvasRef}
         className="particle-text__canvas"
         aria-hidden="true"
       />
-      <span className="particle-text__sr">{text}</span>
+      <span className="particle-text__sr">{fullContent}</span>
     </div>
   );
 };

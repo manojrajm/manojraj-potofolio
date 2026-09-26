@@ -112,7 +112,12 @@ function Hero() {
 
           <h1 id="hero-title" className="hero-main-name particle-heading-wrapper" aria-label="MANOJ RAJ">
             <ParticleText
-              text="MANOJ RAJ"
+              segments={[
+                { text: "M", isAccent: true },
+                { text: "ANOJ ", isAccent: false },
+                { text: "R", isAccent: true },
+                { text: "AJ", isAccent: false },
+              ]}
               particleSize={2.1}
               density={3.6}
               color="#ffffff"
