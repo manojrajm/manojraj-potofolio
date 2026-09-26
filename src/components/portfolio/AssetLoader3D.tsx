@@ -15,6 +15,7 @@ export function AssetLoader3D() {
       const timer = setTimeout(() => setVisible(false), 450);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [active, progress]);
 
   if (!visible) return null;

@@ -408,9 +408,9 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       for (let y = 0; y < offscreen.height; y += step) {
         for (let x = 0; x < offscreen.width; x += step) {
           const idx = (y * offscreen.width + x) * 4;
-          const r = imageData.data[idx];
-          const g = imageData.data[idx + 1];
-          const alpha = imageData.data[idx + 3];
+          const r = imageData.data[idx] ?? 0;
+          const g = imageData.data[idx + 1] ?? 0;
+          const alpha = imageData.data[idx + 3] ?? 0;
           if (alpha > 40) {
             // Chroma Tag: Red > 180 and Green < 120 denotes Accent ('M' or 'R')
             const isAccent = r > 180 && g < 120;

@@ -618,8 +618,8 @@ export default function PortfolioPage() {
         const skillNodes = gsap.utils.toArray<HTMLElement>(".skill-node-pro");
         if (skillNodes.length > 0) {
           skillNodes.sort((a, b) => {
-            const angleA = parseFloat(a.dataset.clockAngle || "0");
-            const angleB = parseFloat(b.dataset.clockAngle || "0");
+            const angleA = parseFloat(a.dataset["clockAngle"] || "0");
+            const angleB = parseFloat(b.dataset["clockAngle"] || "0");
             return angleA - angleB;
           });
 
