@@ -66,12 +66,12 @@ export function CameraController({
       lookX = 0.55;
       lookY = 0.25;
     } else if (projectsTop > winH * 0.45) {
-      // 4. Skills: Wide focal point capturing character in center
-      camX = 0.0;
-      camY = 0.1;
-      camZ = 6.3;
-      lookX = 0.0;
-      lookY = 0.2;
+      // 4. Skills: Wide cinematic framing showing presenter beside Technology Orbit
+      camX = -0.15;
+      camY = -0.16;
+      camZ = 6.4;
+      lookX = 0.2;
+      lookY = 0.05;
     } else if (contactTop > winH * 0.55) {
       // 5. Projects: Framing cards and character
       camX = -0.3;

@@ -81,11 +81,26 @@ export const projects: readonly Project[] = [
 ];
 
 export const skillGroups = [
-  { label: "Frontend", items: ["React", "JavaScript", "HTML", "CSS"] },
-  { label: "Backend", items: ["Node.js", "Express", "REST API"] },
-  { label: "Database", items: ["MSSQL", "SQL"] },
-  { label: "DevOps", items: ["GitHub Actions", "PM2", "Nginx"] },
-  { label: "Tools", items: ["Git", "GitHub", "Vite"] },
+  {
+    label: "Languages",
+    items: ["JavaScript", "Java", "Python", "TypeScript", "SQL"],
+  },
+  {
+    label: "Frontend",
+    items: ["React.js", "React Router", "HTML5", "CSS3", "Styled Components", "Bootstrap", "jQuery", "AngularJS", "Responsive UI"],
+  },
+  {
+    label: "Backend",
+    items: ["Node.js", "Express.js", "Java JDBC", "REST API Development", "Maven"],
+  },
+  {
+    label: "Databases",
+    items: ["Microsoft SQL Server", "Firebase Firestore", "MySQL", "MongoDB", "PostgreSQL"],
+  },
+  {
+    label: "Tools & DevOps",
+    items: ["Git", "GitHub", "GitHub Actions", "CI/CD", "Self-Hosted Runners", "PM2", "Nginx", "Postman", "VS Code", "IntelliJ IDEA", "Figma"],
+  },
 ] as const;
 
 export const experiencePoints = [

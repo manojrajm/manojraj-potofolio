@@ -7,6 +7,7 @@ import { experiencePoints, navItems, projects, skillGroups } from "@/data/portfo
 
 import { AssetLoader3D } from "./AssetLoader3D";
 import { ParticleText } from "./ParticleText";
+import { SkillIcon } from "./SkillIcons";
 
 const PersistentExperience = lazy(() => import("@/three/Experience"));
 const GITHUB = "https://github.com/manojrajm";
@@ -355,9 +356,156 @@ function Experience() {
   );
 }
 
+const skillCategories = [
+  { id: "ALL", label: "ALL", count: 35 },
+  { id: "Languages", label: "Languages", count: 5 },
+  { id: "Frontend", label: "Frontend", count: 9 },
+  { id: "Backend", label: "Backend", count: 5 },
+  { id: "Databases", label: "Databases", count: 5 },
+  { id: "Tools & DevOps", label: "DevOps", count: 11 },
+] as const;
+
 function Skills() {
-  const all = skillGroups.flatMap(group => group.items.map(item => ({ item, group: group.label })));
-  return <section id="skills" className="section skills-section"><div className="section-index">03 / CAPABILITIES</div><div className="skills-intro"><h2 className="display-heading">SYSTEM<br/>ARCHITECTURE</h2><p>A connected full-stack toolkit — from interface logic to production infrastructure.</p></div><div className="constellation" data-cursor="EXPLORE"><div className="constellation-core"><span>FULL STACK</span><span className="brand-accent">M</span>ANOJ<span className="brand-accent">R</span>AJ</div>{all.map(({item, group}, i) => <button key={item} className="skill-node" style={{ "--i": i, "--total": all.length } as React.CSSProperties} aria-label={`${item}, ${group}`}><small>{group}</small>{item}</button>)}</div></section>;
+  const [activeCategory, setActiveCategory] = useState<string>("ALL");
+  const shockwaveRef = useRef<HTMLDivElement>(null);
+
+  // Outer Orbit: Languages (5) + Tools & DevOps (11) = 16 items
+  const outerSkills = [
+    ...skillGroups[0].items.map(item => ({ item, group: skillGroups[0].label })),
+    ...skillGroups[4].items.map(item => ({ item, group: skillGroups[4].label })),
+  ];
+
+  // Inner Orbit: Frontend (9) + Backend (5) + Databases (5) = 19 items
+  const innerSkills = [
+    ...skillGroups[1].items.map(item => ({ item, group: skillGroups[1].label })),
+    ...skillGroups[2].items.map(item => ({ item, group: skillGroups[2].label })),
+    ...skillGroups[3].items.map(item => ({ item, group: skillGroups[3].label })),
+  ];
+
+  const outerNodes = outerSkills.map((node, i) => {
+    const angleDeg = -90 + (i * 360) / outerSkills.length;
+    const rad = (angleDeg * Math.PI) / 180;
+    const x = +(50 + Math.cos(rad) * 47).toFixed(2);
+    const y = +(50 + Math.sin(rad) * 47).toFixed(2);
+    const clockAngle = +((i * 360) / outerSkills.length).toFixed(2);
+    return { ...node, x, y, clockAngle, orbit: "outer" };
+  });
+
+  const innerNodes = innerSkills.map((node, j) => {
+    const offsetDeg = 9.47;
+    const angleDeg = -90 + offsetDeg + (j * 360) / innerSkills.length;
+    const rad = (angleDeg * Math.PI) / 180;
+    const x = +(50 + Math.cos(rad) * 35.5).toFixed(2);
+    const y = +(50 + Math.sin(rad) * 35.5).toFixed(2);
+    const clockAngle = +(((j * 360) / innerSkills.length + offsetDeg) % 360).toFixed(2);
+    return { ...node, x, y, clockAngle, orbit: "inner" };
+  });
+
+  const allNodes = [...outerNodes, ...innerNodes];
+  const activeCount = activeCategory === "ALL"
+    ? allNodes.length
+    : allNodes.filter(n => n.group === activeCategory).length;
+
+  const handleCategorySelect = (catId: string) => {
+    setActiveCategory(catId);
+    if (shockwaveRef.current) {
+      shockwaveRef.current.classList.remove("trigger-shockwave");
+      void shockwaveRef.current.offsetWidth;
+      shockwaveRef.current.classList.add("trigger-shockwave");
+    }
+  };
+
+  return (
+    <section id="skills" className="section skills-section">
+      <div className="section-index skills-anim-sub">03 / CAPABILITIES</div>
+      
+      {/* Phase 3: Technical Heading & Subtitle */}
+      <div className="skills-intro">
+        <h2 className="exp-tech-heading skills-anim-heading">
+          <span className="brand-accent">TECHNOLOGY</span> ECOSYSTEM
+        </h2>
+        <p className="skills-anim-sub">Technologies I build with every day.</p>
+      </div>
+
+      {/* Category Filter Pills (Option 3 / Phase 5) */}
+      <div className="constellation-filter-bar" role="tablist" aria-label="Technology category filter">
+        {skillCategories.map(cat => {
+          const isActive = activeCategory === cat.id;
+          return (
+            <button
+              key={cat.id}
+              role="tab"
+              aria-selected={isActive}
+              className={`filter-pill ${isActive ? "is-active" : ""}`}
+              onClick={() => handleCategorySelect(cat.id)}
+            >
+              <span>{cat.label}</span>
+              <span className="pill-count">{cat.count}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Phase 6: Circular Skill Layout beside Presenter Character */}
+      <div className="skills-stage-grid">
+        {/* Left Column on Desktop: Presenter Character Stage Spacer */}
+        <div className="skills-presenter-spacer" aria-hidden="true">
+          <div className="presenter-floor-halo" />
+        </div>
+
+        {/* Right Column on Desktop: The Technology Orbit */}
+        <div className="technology-orbit-wrapper">
+          <div className="technology-orbit" data-cursor="EXPLORE">
+            {/* Phase 9: Rotating Gradient Ring, Thin Neon Stroke & Glow */}
+            <div className="orbit-glow-ring" aria-hidden="true" />
+            <div className="orbit-ring orbit-ring-outer" aria-hidden="true" />
+            <div className="orbit-ring orbit-ring-inner" aria-hidden="true" />
+            <div className="orbit-ring orbit-ring-radar" aria-hidden="true" />
+
+            {/* Phase 4: Meaningful Central Badge */}
+            <div className="constellation-core-hud" aria-hidden="true">
+              <div className="hud-ring-spinner" />
+              <span className="hud-badge">ARCHITECT // STACK</span>
+              <strong className="hud-category">
+                {activeCategory === "ALL" ? "FULL STACK" : activeCategory.toUpperCase()}
+              </strong>
+              <span className="hud-status">
+                <i className="hud-dot" /> {activeCount} CAPABILITIES
+              </span>
+            </div>
+
+            {/* Phase 7 & 9: Purple Radial Energy Splash Pulse */}
+            <div ref={shockwaveRef} className="constellation-shockwave" aria-hidden="true" />
+
+            {/* Phase 5: All 35 Technology Nodes with Logos & Tooltips */}
+            {allNodes.map(node => {
+              const isSelected = activeCategory === "ALL" || node.group === activeCategory;
+              return (
+                <button
+                  key={node.item}
+                  className={`skill-node-pro ${node.orbit} ${isSelected ? "is-active" : "is-dimmed"}`}
+                  style={{
+                    left: `${node.x}%`,
+                    top: `${node.y}%`,
+                  }}
+                  data-clock-angle={node.clockAngle}
+                  aria-label={`${node.item}, ${node.group}`}
+                >
+                  <span className="skill-icon-wrap">
+                    <SkillIcon name={node.item} className="skill-node-svg" />
+                  </span>
+                  <span className="skill-name">{node.item}</span>
+                  <span className="skill-tooltip" aria-hidden="true">
+                    {node.group} • {node.item}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function Projects() {
@@ -456,6 +604,80 @@ export default function PortfolioPage() {
             },
           }
         );
+
+        // Skills Section: Clockwise Sequential Reveal & Shockwave Splash Blast
+        const skillNodes = gsap.utils.toArray<HTMLElement>(".skill-node-pro");
+        if (skillNodes.length > 0) {
+          skillNodes.sort((a, b) => {
+            const angleA = parseFloat(a.dataset.clockAngle || "0");
+            const angleB = parseFloat(b.dataset.clockAngle || "0");
+            return angleA - angleB;
+          });
+
+          const skillsTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#skills",
+              start: "top 78%",
+              toggleActions: "play none none reverse",
+            },
+          });
+
+          // 1. Heading, subtitle, and filter bar entrance
+          skillsTl.fromTo(
+            ".skills-anim-heading, .skills-anim-sub, .constellation-filter-bar",
+            { opacity: 0, y: 35, filter: "blur(5px)" },
+            {
+              opacity: 1,
+              y: 0,
+              filter: "blur(0px)",
+              duration: 0.7,
+              stagger: 0.1,
+              ease: "power2.out",
+            }
+          );
+
+          // 2. Central Badge & Orbit Rings entrance
+          skillsTl.fromTo(
+            ".constellation-core-hud, .orbit-glow-ring",
+            { scale: 0.5, opacity: 0 },
+            {
+              scale: 1,
+              opacity: 1,
+              duration: 0.6,
+              ease: "back.out(1.8)",
+            },
+            "-=0.3"
+          );
+
+          // 3. Phase 7: 8-Sector Clockwise Reveal Sequence (Scale 0.6 -> 1, rotation, soft bounce)
+          skillsTl.fromTo(
+            skillNodes,
+            { scale: 0.6, opacity: 0, rotation: -8, filter: "blur(4px)" },
+            {
+              scale: 1,
+              opacity: 1,
+              rotation: 0,
+              filter: "blur(0px)",
+              duration: 0.55,
+              stagger: 0.035, // Smooth clockwise ripple through 35 nodes (~1.2s total)
+              ease: "back.out(1.8)", // Soft bounce
+            },
+            "-=0.2"
+          );
+
+          // 4. Phase 7: Final Purple Splash Pulse around full circle (+200ms after reveal)
+          skillsTl.fromTo(
+            ".constellation-shockwave",
+            { scale: 0.2, opacity: 0.95 },
+            {
+              scale: 2.8,
+              opacity: 0,
+              duration: 1.25,
+              ease: "power2.out",
+            },
+            "+=0.2"
+          );
+        }
 
         gsap.utils.toArray<HTMLElement>(".stack-wall div").forEach((el, i) => gsap.fromTo(el, { xPercent: i % 2 ? 18 : -18, filter: "blur(8px)" }, { xPercent: 0, filter: "blur(0px)", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom center", scrub: 1 } }));
         gsap.to(".marquee-forward span", { xPercent: -18, ease: "none", scrollTrigger: { trigger: ".marquee-section", scrub: 1 } });

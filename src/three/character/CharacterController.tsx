@@ -94,24 +94,25 @@ export function CharacterController({
       targetScale = isMobile ? 1.24 : 1.56;
     } else if (projectsTop > winH * 0.45) {
       // 4. SKILLS SECTION:
-      // Glides from RIGHT to DEAD CENTER (0.0)
-      // Scales up to 1.95x, presenting full-stack constellation with wide arms
+      // Stands beside Technology Orbit on left side (-1.45), facing orbit (+0.48 rad)
+      // Lowered to -1.36 for abundant headroom below navbar, scale 1.55
+      // Enters complete skeletal chain SKILLS_PRESENT stance with upward open palm
       nextSection = "skills";
       nextAnim = "SKILLS_PRESENT";
       const progress = Math.min(1, Math.max(0, 1 - skillsTop / (winH * 0.45)));
-      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.75, 0.0, progress);
-      targetY = isMobile ? -1.05 : THREE.MathUtils.lerp(-1.32, -1.15, progress);
-      targetZ = isMobile ? -0.3 : 0.65;
-      targetRotY = THREE.MathUtils.lerp(Math.PI * 2.0 - 0.35, Math.PI * 4.0, progress) + (pointer.x * 0.15);
-      targetScale = isMobile ? 1.4 : 1.95;
+      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.75, -1.45, progress);
+      targetY = isMobile ? -1.20 : THREE.MathUtils.lerp(-1.32, -1.36, progress);
+      targetZ = isMobile ? -0.3 : 0.35;
+      targetRotY = THREE.MathUtils.lerp(Math.PI * 2.0 - 0.35, Math.PI * 4.0 + 0.48, progress) + (pointer.x * 0.12);
+      targetScale = isMobile ? 1.25 : 1.55;
     } else if (contactTop > winH * 0.55) {
       // 5. PROJECTS SECTION:
       // Glides to side (+1.8), attentive stance observing selected work
       nextSection = "projects";
       nextAnim = "PROJECTS_INSPECT";
       const progress = Math.min(1, Math.max(0, 1 - projectsTop / (winH * 0.45)));
-      targetX = isMobile ? 0 : THREE.MathUtils.lerp(0.0, 1.8, progress);
-      targetY = isMobile ? -0.95 : -1.0;
+      targetX = isMobile ? 0 : THREE.MathUtils.lerp(-1.45, 1.8, progress);
+      targetY = isMobile ? -0.95 : THREE.MathUtils.lerp(-1.36, -1.0, progress);
       targetZ = isMobile ? -0.4 : 0.25;
       targetRotY = THREE.MathUtils.lerp(Math.PI * 4.0, Math.PI * 3.8, progress) + (pointer.x * 0.15);
       targetScale = isMobile ? 1.35 : 1.8;

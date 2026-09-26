@@ -148,19 +148,19 @@ function RiggedCharacterModel({ reducedMotion = false }: CharacterModelProps) {
       rightForeArmOffsetX = 0.75;
     } else if (projectsTop > winH * 0.45) {
       // 4. SKILLS SECTION:
-      // Centered inside constellation, arms spread in architecture showcase
+      // Stands beside Technology Orbit, arm gesturing toward orbit
       const t = Math.min(1, Math.max(0, 1 - (skillsTop / (winH * 0.45))));
-      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.75, 0.0, t);
-      targetY = isMobile ? -1.05 : -1.15;
-      targetZ = isMobile ? -0.4 : 0.65;
-      targetRotY = THREE.MathUtils.lerp(-0.4, Math.PI * 2.15, t) + (pointer.x * 0.2);
-      targetScale = isMobile ? 1.4 : 1.95;
+      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.75, -1.45, t);
+      targetY = isMobile ? -1.20 : -1.36;
+      targetZ = isMobile ? -0.4 : 0.35;
+      targetRotY = THREE.MathUtils.lerp(-0.4, Math.PI * 2.15 + 0.48, t) + (pointer.x * 0.12);
+      targetScale = isMobile ? 1.25 : 1.55;
 
-      // Architectural presentation posture: hands open wide
-      leftArmOffsetZ = -0.75;
-      leftArmOffsetY = -0.3;
-      rightArmOffsetZ = 0.75;
-      rightArmOffsetY = 0.3;
+      // Presenting posture: right arm raised pointing toward orbit
+      rightArmOffsetZ = 0.55;
+      rightArmOffsetY = 0.25;
+      leftArmOffsetZ = -0.2;
+      leftArmOffsetY = -0.1;
     } else if (contactTop > winH * 0.55) {
       // 5. PROJECTS SECTION:
       // Right side observation pose

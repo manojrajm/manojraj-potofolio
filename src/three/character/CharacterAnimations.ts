@@ -442,69 +442,235 @@ export function createTechGestureClip(
 
 /**
  * 4. SKILLS_PRESENT Animation (Skills Section):
- * Upright proud spine, both arms open outward presenting the skill constellation
+/**
+ * 4. SKILLS_PRESENT Animation (Skills Section):
+ * Full skeletal chain presentation:
+ * Spine (weight shift) -> Shoulder -> Upper Arm -> Forearm -> Upward Wrist/Palm -> Open Fingers
+ * Synchronized with Head clockwise tracking and natural idle breathing.
  */
 export function createSkillsPresentClip(
   restQuats: Record<string, THREE.Quaternion>,
-  _restPositions: Record<string, THREE.Vector3>
+  restPositions: Record<string, THREE.Vector3>
 ): THREE.AnimationClip {
   const duration = 3.6;
-  const times = [0, 1.8, 3.6];
+  const times = [0, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.05, 2.80, 3.60];
 
-  const openPalmFingers: [number, number, number][] = [
-    [0.08, 0.02, 0],
-    [0.05, 0.01, 0],
-    [0.08, 0.02, 0],
-  ];
+  // Natural open presentation fingers (fingers relaxed, palm open upward)
+  const openFingers: [number, number, number][] = times.map((t) => {
+    if (t < 0.25) return [0.10, 0.04, 0.01];
+    if (t < 2.05) return [0.06, 0.02, 0.01]; // Open naturally during presentation
+    return [0.08, 0.03, 0.01]; // Breathing ease
+  });
+
+  const relaxedThumb: [number, number, number][] = times.map((t) => {
+    if (t < 0.25) return [0.08, 0.06, 0.02];
+    if (t < 2.05) return [0.04, 0.08, 0.01]; // Thumb comfortably abducted
+    return [0.06, 0.07, 0.02];
+  });
 
   const tracks: THREE.KeyframeTrack[] = [
-    // Upright proud posture
+    // 1. Weight shift in Hips (shifting body weight onto back foot)
+    createPosTrack("Hips", restPositions, times, [
+      [-0.01, -0.01, 0.01],
+      [-0.03, -0.01, 0.02],
+      [-0.04, -0.02, 0.02],
+      [-0.04, -0.02, 0.02],
+      [-0.03, -0.02, 0.02],
+      [-0.03, -0.02, 0.01],
+      [-0.02, -0.01, 0.01],
+      [-0.02, -0.01, 0.01],
+      [-0.03, -0.01, 0.02],
+      [-0.02, -0.01, 0.01],
+      [-0.01, -0.01, 0.01],
+    ]),
+
+    // 2. Spine & Upper Torso Rotation (Weight shifts, torso angles gracefully toward orbit)
     createRelativeQuatTrack("Spine", restQuats, times, [
-      [-0.04, 0, 0],
-      [-0.02, 0, 0],
-      [-0.04, 0, 0],
+      [-0.02, 0.06, 0.02],
+      [-0.04, 0.10, 0.03],
+      [-0.05, 0.12, 0.03],
+      [-0.05, 0.12, 0.03],
+      [-0.04, 0.10, 0.02],
+      [-0.04, 0.08, 0.02],
+      [-0.03, 0.07, 0.02],
+      [-0.03, 0.08, 0.02],
+      [-0.04, 0.09, 0.02],
+      [-0.03, 0.08, 0.02],
+      [-0.02, 0.06, 0.02],
     ]),
+
+    createRelativeQuatTrack("Spine1", restQuats, times, [
+      [-0.02, 0.05, 0.01],
+      [-0.03, 0.08, 0.02],
+      [-0.04, 0.10, 0.02],
+      [-0.04, 0.10, 0.02],
+      [-0.03, 0.08, 0.02],
+      [-0.03, 0.07, 0.01],
+      [-0.02, 0.06, 0.01],
+      [-0.02, 0.07, 0.01],
+      [-0.03, 0.08, 0.02],
+      [-0.02, 0.06, 0.01],
+      [-0.02, 0.05, 0.01],
+    ]),
+
+    // 3. Head & Neck Tracking (Follows the 8 sectors clockwise: Top -> Right -> Bottom -> Left -> Splash!)
+    createRelativeQuatTrack("Neck", restQuats, times, [
+      [-0.08, 0.15, -0.03], // 0.00s: Top (12 o'clock)
+      [-0.06, 0.22, -0.04], // 0.25s: Top-Right
+      [-0.01, 0.26, -0.02], // 0.50s: Right
+      [ 0.04, 0.24,  0.01], // 0.75s: Bottom-Right
+      [ 0.06, 0.18,  0.02], // 1.00s: Bottom
+      [ 0.04, 0.12,  0.03], // 1.25s: Bottom-Left
+      [-0.01, 0.08,  0.01], // 1.50s: Left
+      [-0.05, 0.10, -0.02], // 1.75s: Top-Left
+      [-0.04, 0.14, -0.01], // 2.05s: Splash pulse / centered look
+      [-0.03, 0.12,  0.00], // 2.80s: Breathing
+      [-0.08, 0.15, -0.03], // 3.60s: Loop
+    ]),
+
     createRelativeQuatTrack("Head", restQuats, times, [
-      [-0.06, 0, 0],
-      [-0.03, 0, 0],
-      [-0.06, 0, 0],
+      [-0.10, 0.22, -0.05], // 0.00s: Gaze directed to Top icon (12 o'clock)
+      [-0.08, 0.32, -0.06], // 0.25s: Gaze directed to Top-Right
+      [-0.02, 0.38, -0.03], // 0.50s: Gaze directed to Right
+      [ 0.06, 0.35,  0.02], // 0.75s: Gaze directed to Bottom-Right
+      [ 0.09, 0.25,  0.03], // 1.00s: Gaze directed to Bottom
+      [ 0.06, 0.16,  0.04], // 1.25s: Gaze directed to Bottom-Left
+      [-0.02, 0.12,  0.01], // 1.50s: Gaze directed to Left
+      [-0.07, 0.15, -0.03], // 1.75s: Gaze directed to Top-Left
+      [-0.05, 0.20, -0.01], // 2.05s: Final splash pulse / Proud presentation
+      [-0.04, 0.18,  0.00], // 2.80s: Natural breathing
+      [-0.10, 0.22, -0.05], // 3.60s: Loop
     ]),
-    // Left Arm Chain
+
+    // 4. Presenting Arm Chain: Left Arm (Spine -> LeftShoulder -> LeftArm -> LeftForeArm -> LeftHand/Wrist Upward)
+    createRelativeQuatTrack("LeftShoulder", restQuats, times, [
+      [-0.06,  0.12, -0.10],
+      [-0.08,  0.16, -0.14],
+      [-0.10,  0.18, -0.16],
+      [-0.10,  0.18, -0.16],
+      [-0.09,  0.16, -0.14],
+      [-0.08,  0.15, -0.12],
+      [-0.07,  0.14, -0.11],
+      [-0.07,  0.14, -0.11],
+      [-0.08,  0.16, -0.13],
+      [-0.07,  0.14, -0.12],
+      [-0.06,  0.12, -0.10],
+    ]),
+
     createRelativeQuatTrack("LeftArm", restQuats, times, [
-      [0.35, 0.0, 0.65],
-      [0.38, 0.0, 0.70],
-      [0.35, 0.0, 0.65],
+      [ 0.42,  0.18,  0.58], // Raised and extended forward toward the Technology Orbit
+      [ 0.46,  0.22,  0.64],
+      [ 0.50,  0.24,  0.68],
+      [ 0.50,  0.24,  0.68],
+      [ 0.48,  0.22,  0.65],
+      [ 0.46,  0.20,  0.62],
+      [ 0.44,  0.19,  0.60],
+      [ 0.44,  0.19,  0.60],
+      [ 0.47,  0.21,  0.64],
+      [ 0.44,  0.19,  0.60],
+      [ 0.42,  0.18,  0.58],
     ]),
+
     createRelativeQuatTrack("LeftForeArm", restQuats, times, [
-      [0.0, 0.0, 0.35],
-      [0.0, 0.0, 0.40],
-      [0.0, 0.0, 0.35],
+      [-0.26,  0.22,  0.42], // Natural elbow angle supporting the palm
+      [-0.30,  0.25,  0.48],
+      [-0.32,  0.26,  0.50],
+      [-0.32,  0.26,  0.50],
+      [-0.30,  0.25,  0.47],
+      [-0.28,  0.23,  0.44],
+      [-0.26,  0.22,  0.42],
+      [-0.26,  0.22,  0.42],
+      [-0.29,  0.24,  0.46],
+      [-0.27,  0.23,  0.43],
+      [-0.26,  0.22,  0.42],
     ]),
-    // Right Arm Chain
+
+    // CRITICAL FIX: Left wrist rotates UPWARD (extension and supination) so the palm faces UPWARD toward the orbit!
+    createRelativeQuatTrack("LeftHand", restQuats, times, [
+      [-0.58,  0.28,  0.38],
+      [-0.64,  0.32,  0.42],
+      [-0.66,  0.34,  0.45],
+      [-0.66,  0.34,  0.45],
+      [-0.64,  0.32,  0.42],
+      [-0.60,  0.30,  0.40],
+      [-0.58,  0.28,  0.38],
+      [-0.58,  0.28,  0.38],
+      [-0.62,  0.31,  0.41],
+      [-0.60,  0.29,  0.39],
+      [-0.58,  0.28,  0.38],
+    ]),
+
+    // 5. Right Arm Chain (Relaxed natural presenter posture at hip/side, no T-pose)
+    createRelativeQuatTrack("RightShoulder", restQuats, times, [
+      [ 0.04, -0.06,  0.06],
+      [ 0.05, -0.08,  0.08],
+      [ 0.05, -0.08,  0.08],
+      [ 0.05, -0.08,  0.08],
+      [ 0.05, -0.08,  0.08],
+      [ 0.04, -0.06,  0.06],
+      [ 0.04, -0.06,  0.06],
+      [ 0.04, -0.06,  0.06],
+      [ 0.05, -0.07,  0.07],
+      [ 0.04, -0.06,  0.06],
+      [ 0.04, -0.06,  0.06],
+    ]),
+
     createRelativeQuatTrack("RightArm", restQuats, times, [
-      [0.35, 0.0, -0.65],
-      [0.38, 0.0, -0.70],
-      [0.35, 0.0, -0.65],
+      [ 0.65, -0.06, -0.22], // Lowered naturally beside torso, no T-pose
+      [ 0.68, -0.08, -0.24],
+      [ 0.70, -0.09, -0.26],
+      [ 0.70, -0.09, -0.26],
+      [ 0.68, -0.08, -0.24],
+      [ 0.66, -0.07, -0.23],
+      [ 0.65, -0.06, -0.22],
+      [ 0.65, -0.06, -0.22],
+      [ 0.68, -0.08, -0.24],
+      [ 0.66, -0.07, -0.23],
+      [ 0.65, -0.06, -0.22],
     ]),
+
     createRelativeQuatTrack("RightForeArm", restQuats, times, [
-      [0.0, 0.0, -0.35],
-      [0.0, 0.0, -0.40],
-      [0.0, 0.0, -0.35],
+      [ 0.08, -0.04, -0.18],
+      [ 0.10, -0.05, -0.20],
+      [ 0.11, -0.06, -0.22],
+      [ 0.11, -0.06, -0.22],
+      [ 0.10, -0.05, -0.20],
+      [ 0.09, -0.04, -0.19],
+      [ 0.08, -0.04, -0.18],
+      [ 0.08, -0.04, -0.18],
+      [ 0.10, -0.05, -0.20],
+      [ 0.09, -0.04, -0.19],
+      [ 0.08, -0.04, -0.18],
     ]),
-    // Open palm fingers
-    ...createFingerTracks("Left", restQuats, times, {
-      thumb: openPalmFingers,
-      index: openPalmFingers,
-      middle: openPalmFingers,
-      ring: openPalmFingers,
-      pinky: openPalmFingers,
-    }),
+
+    createRelativeQuatTrack("RightHand", restQuats, times, [
+      [-0.20, -0.08, -0.14],
+      [-0.22, -0.10, -0.16],
+      [-0.24, -0.11, -0.18],
+      [-0.24, -0.11, -0.18],
+      [-0.22, -0.10, -0.16],
+      [-0.21, -0.09, -0.15],
+      [-0.20, -0.08, -0.14],
+      [-0.20, -0.08, -0.14],
+      [-0.22, -0.10, -0.16],
+      [-0.21, -0.09, -0.15],
+      [-0.20, -0.08, -0.14],
+    ]),
+
+    // 6. Fingers open naturally on both hands
     ...createFingerTracks("Right", restQuats, times, {
-      thumb: openPalmFingers,
-      index: openPalmFingers,
-      middle: openPalmFingers,
-      ring: openPalmFingers,
-      pinky: openPalmFingers,
+      thumb: relaxedThumb,
+      index: openFingers,
+      middle: openFingers,
+      ring: openFingers,
+      pinky: openFingers,
+    }),
+    ...createFingerTracks("Left", restQuats, times, {
+      thumb: relaxedThumb,
+      index: openFingers,
+      middle: openFingers,
+      ring: openFingers,
+      pinky: openFingers,
     }),
   ];
 
