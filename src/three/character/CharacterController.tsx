@@ -81,13 +81,13 @@ export function CharacterController({
       targetScale = isMobile ? 1.22 : 1.55;
     } else if (skillsTop > winH * 0.45) {
       // 3. EXPERIENCE SECTION:
-      // Transitions from LEFT to RIGHT (+1.48), standing in dedicated right stage column
+      // Transitions from LEFT to FAR RIGHT (+1.75), standing in dedicated right stage column
       // Enters coding stance typing on floating holographic terminal
-      // Head lowered to -1.32 with scale 1.56 for clean headroom below floating navbar
+      // Moved to 1.75 so the character and holographic rings stand completely clear of the Bento card
       nextSection = "experience";
       nextAnim = "TECH_GESTURE";
       const progress = Math.min(1, Math.max(0, 1 - expTop / (winH * 0.45)));
-      targetX = isMobile ? 0 : THREE.MathUtils.lerp(-1.70, 1.48, progress);
+      targetX = isMobile ? 0 : THREE.MathUtils.lerp(-1.70, 1.75, progress);
       targetY = isMobile ? -1.15 : THREE.MathUtils.lerp(-1.35, -1.32, progress);
       targetZ = isMobile ? -0.5 : 0.15;
       targetRotY = THREE.MathUtils.lerp(0.72, Math.PI * 2.0 - 0.35, progress);
@@ -99,7 +99,7 @@ export function CharacterController({
       nextSection = "skills";
       nextAnim = "SKILLS_PRESENT";
       const progress = Math.min(1, Math.max(0, 1 - skillsTop / (winH * 0.45)));
-      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.48, 0.0, progress);
+      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.75, 0.0, progress);
       targetY = isMobile ? -1.05 : THREE.MathUtils.lerp(-1.32, -1.15, progress);
       targetZ = isMobile ? -0.3 : 0.65;
       targetRotY = THREE.MathUtils.lerp(Math.PI * 2.0 - 0.35, Math.PI * 4.0, progress) + (pointer.x * 0.15);

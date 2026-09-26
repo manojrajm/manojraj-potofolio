@@ -44,7 +44,7 @@ a { color: inherit; text-decoration: none; }
 button, a { -webkit-tap-highlight-color: transparent; }
 ::selection { background: color-mix(in oklab, var(--primary) 75%, transparent); color: var(--foreground); }
 .portfolio { min-height: 100vh; background: var(--background); overflow: clip; }
-.section { width: min(100% - 3rem, 1440px); margin-inline: auto; padding-block: 9rem; }
+.section { scroll-margin-top: 90px; width: min(100% - 3rem, 1440px); margin-inline: auto; padding-block: 9rem; }
 .section-index, .eyebrow { color: var(--muted-foreground); font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
 .display-heading { margin: 1.4rem 0 4rem; font-family: var(--font-display); font-size: clamp(3.7rem, 10vw, 10rem); line-height: .82; letter-spacing: 0; text-transform: uppercase; }
 
@@ -177,7 +177,7 @@ main { position: relative; z-index: 2; }
 .glass-cube { position: absolute; left: 8%; top: 58%; width: 170px; aspect-ratio: 1; border: 1px solid color-mix(in oklab, var(--primary) 65%, transparent); transform: rotate(18deg); box-shadow: inset 0 0 60px color-mix(in oklab, var(--primary) 12%, transparent), var(--shadow-glow); opacity: .65; animation: cubeFloat 7s ease-in-out infinite; }.glass-cube div { position: absolute; padding: .3rem; color: var(--metal); font-size: .56rem; letter-spacing: .12em; }.glass-cube div:nth-child(1){top:10%;left:10%}.glass-cube div:nth-child(2){top:12%;right:8%}.glass-cube div:nth-child(3){bottom:10%;left:12%}.glass-cube div:nth-child(4){bottom:12%;right:10%}
 
 .experience-section { border-top: 1px solid var(--border); }
-.experience-grid { display: grid; grid-template-columns: 1.22fr 0.78fr; gap: 3.5rem; align-items: start; }
+.experience-grid { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 3.2rem; align-items: start; }
 .experience-content { width: 100%; }
 .experience-stage-spacer { min-height: 540px; pointer-events: none; }
 .exp-tech-heading { margin: 1.4rem 0 2.2rem; font-family: var(--font-display); font-size: clamp(2.4rem, 4.5vw, 4.2rem); line-height: 0.95; letter-spacing: 0.02em; text-transform: uppercase; color: var(--foreground); }

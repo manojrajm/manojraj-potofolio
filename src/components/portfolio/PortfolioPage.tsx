@@ -418,13 +418,13 @@ export default function PortfolioPage() {
           }
         );
 
-        // Experience Section: Left-to-Right Slide & Fade-In with GSAP ScrollTrigger
+        // Experience Section: Bottom-to-Top Fade-In with GSAP ScrollTrigger
         gsap.fromTo(
           ".exp-anim-text",
-          { opacity: 0, x: -85, filter: "blur(6px)" },
+          { opacity: 0, y: 70, filter: "blur(6px)" },
           {
             opacity: 1,
-            x: 0,
+            y: 0,
             filter: "blur(0px)",
             duration: 1.0,
             stagger: 0.12,
@@ -437,15 +437,16 @@ export default function PortfolioPage() {
           }
         );
 
-        // Bento Pillar Cards 3D Perspective Lift
+        // Bento Pillar Cards: Bottom-to-Top Staggered Fade-In
         gsap.fromTo(
           ".bento-pillar-card",
-          { opacity: 0, y: 30, scale: 0.96 },
+          { opacity: 0, y: 55, scale: 0.96, filter: "blur(4px)" },
           {
             opacity: 1,
             y: 0,
             scale: 1,
-            duration: 0.8,
+            filter: "blur(0px)",
+            duration: 0.85,
             stagger: 0.12,
             ease: "power2.out",
             scrollTrigger: {
