@@ -289,7 +289,7 @@ function Experience() {
           <h2 className="exp-tech-heading exp-anim-text">
             <span className="brand-accent">ENGINEERING</span> JOURNEY
           </h2>
-          
+
           <div className="experience-bento-hub exp-anim-text">
             {/* Top Telemetry Bar */}
             <div className="bento-telemetry-bar">
@@ -417,43 +417,25 @@ function Skills() {
 
   return (
     <section id="skills" className="section skills-section">
-      <div className="section-index skills-anim-sub">03 / CAPABILITIES</div>
-      
-      {/* Phase 3: Technical Heading & Subtitle */}
-      <div className="skills-intro">
+
+      {/* Technical Heading & Subtitle - Full Left Aligned like Experience */}
+      <div className="skills-header-block">
         <h2 className="exp-tech-heading skills-anim-heading">
-          <span className="brand-accent">TECHNOLOGY</span> ECOSYSTEM
+          <span className="brand-accent">CORE</span> STACK
         </h2>
-        <p className="skills-anim-sub">Technologies I build with every day.</p>
+        <p className="skills-lede-sub skills-anim-sub">
+          Technologies I build with every day — from interface logic to cloud orchestration.
+        </p>
       </div>
 
-      {/* Category Filter Pills (Option 3 / Phase 5) */}
-      <div className="constellation-filter-bar" role="tablist" aria-label="Technology category filter">
-        {skillCategories.map(cat => {
-          const isActive = activeCategory === cat.id;
-          return (
-            <button
-              key={cat.id}
-              role="tab"
-              aria-selected={isActive}
-              className={`filter-pill ${isActive ? "is-active" : ""}`}
-              onClick={() => handleCategorySelect(cat.id)}
-            >
-              <span>{cat.label}</span>
-              <span className="pill-count">{cat.count}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Phase 6: Circular Skill Layout beside Presenter Character */}
+      {/* 3-Column Skills Stage Grid: [Left: Presenter Character] [Center: Technology Orbit] [Right: Vertical Filter Dock] */}
       <div className="skills-stage-grid">
         {/* Left Column on Desktop: Presenter Character Stage Spacer */}
         <div className="skills-presenter-spacer" aria-hidden="true">
           <div className="presenter-floor-halo" />
         </div>
 
-        {/* Right Column on Desktop: The Technology Orbit */}
+        {/* Center Column on Desktop: The Technology Orbit */}
         <div className="technology-orbit-wrapper">
           <div className="technology-orbit" data-cursor="EXPLORE">
             {/* Phase 9: Rotating Gradient Ring, Thin Neon Stroke & Glow */}
@@ -503,22 +485,49 @@ function Skills() {
             })}
           </div>
         </div>
+
+        {/* Right Column on Desktop: Vertical Cyber Filter Dock */}
+        <aside className="skills-vertical-dock" role="tablist" aria-label="Technology category filter">
+          <div className="dock-header">
+            <span className="dock-telemetry-tag">FILTER // STACK</span>
+          </div>
+          <div className="dock-pill-stack">
+            {skillCategories.map(cat => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  className={`dock-filter-pill ${isActive ? "is-active" : ""}`}
+                  onClick={() => handleCategorySelect(cat.id)}
+                >
+                  <span className="dock-pill-indicator">
+                    <span className="dock-pulse-dot" />
+                  </span>
+                  <span className="dock-cat-name">{cat.label}</span>
+                  <span className="dock-count-badge">{cat.count}</span>
+                </button>
+              );
+            })}
+          </div>
+        </aside>
       </div>
     </section>
   );
 }
 
 function Projects() {
-  return <section id="projects" className="projects-section"><div className="section project-heading"><div className="section-index">04 / SELECTED WORK</div><h2 className="display-heading">BUILT TO<br/>SOLVE.</h2><p>Products and engineering concepts shaped around real workflows.</p></div><div className="project-stack">{projects.map((project, index) => <article key={project.name} className="project-card" style={{ top: `${88 + index * 12}px`, zIndex: index + 1 }} data-cursor="VIEW"><div className="project-image"><img src={project.image} alt={project.alt} width={1280} height={800} loading="lazy"/><div className="project-number">{project.number}</div></div><div className="project-content"><div><p className="project-category">{project.category}</p><h3>{project.name}</h3>{project.note && <p className="project-note">{project.note}</p>}</div><p className="project-description">{project.description}</p><ul className="project-features">{project.features.map(feature => <li key={feature}>{feature}</li>)}</ul><div className="project-footer"><div className="stack-list">{project.stack.map(tech => <span key={tech}>{tech}</span>)}</div>{project.href && <a href={project.href} target="_blank" rel="noreferrer" aria-label={`${project.label}: ${project.name}`}>{project.label} <ArrowUpRight /></a>}</div></div></article>)}</div></section>;
+  return <section id="projects" className="projects-section"><div className="section project-heading"><div className="section-index">04 / SELECTED WORK</div><h2 className="display-heading">BUILT TO<br />SOLVE.</h2><p>Products and engineering concepts shaped around real workflows.</p></div><div className="project-stack">{projects.map((project, index) => <article key={project.name} className="project-card" style={{ top: `${88 + index * 12}px`, zIndex: index + 1 }} data-cursor="VIEW"><div className="project-image"><img src={project.image} alt={project.alt} width={1280} height={800} loading="lazy" /><div className="project-number">{project.number}</div></div><div className="project-content"><div><p className="project-category">{project.category}</p><h3>{project.name}</h3>{project.note && <p className="project-note">{project.note}</p>}</div><p className="project-description">{project.description}</p><ul className="project-features">{project.features.map(feature => <li key={feature}>{feature}</li>)}</ul><div className="project-footer"><div className="stack-list">{project.stack.map(tech => <span key={tech}>{tech}</span>)}</div>{project.href && <a href={project.href} target="_blank" rel="noreferrer" aria-label={`${project.label}: ${project.name}`}>{project.label} <ArrowUpRight /></a>}</div></div></article>)}</div></section>;
 }
 
 function Process() {
-  const stages = [["01","DISCOVER","Understand the workflow and problem."],["02","DESIGN","Turn the workflow into a clear user experience."],["03","BUILD","Develop frontend, APIs, database and integrations."],["04","DEPLOY","Test, optimize and deploy production-ready software."]] as const;
-  return <section className="section process-section"><div className="section-index">05 / PROCESS</div><h2 className="display-heading">FROM IDEA TO<br/>PRODUCTION</h2><div className="process-grid">{stages.map(([n,title,copy]) => <article key={title}><span>{n}</span><div className="process-shape" aria-hidden="true"/><h3>{title}</h3><p>{copy}</p></article>)}</div></section>;
+  const stages = [["01", "DISCOVER", "Understand the workflow and problem."], ["02", "DESIGN", "Turn the workflow into a clear user experience."], ["03", "BUILD", "Develop frontend, APIs, database and integrations."], ["04", "DEPLOY", "Test, optimize and deploy production-ready software."]] as const;
+  return <section className="section process-section"><div className="section-index">05 / PROCESS</div><h2 className="display-heading">FROM IDEA TO<br />PRODUCTION</h2><div className="process-grid">{stages.map(([n, title, copy]) => <article key={title}><span>{n}</span><div className="process-shape" aria-hidden="true" /><h3>{title}</h3><p>{copy}</p></article>)}</div></section>;
 }
 
 function StackWall() {
-  return <section className="stack-wall" aria-label="Engineering stack">{["REACT","NODE","MSSQL","JAVASCRIPT","TYPESCRIPT","REST API","GIT","NGINX"].map((item,i) => <div key={item} className={i % 2 ? "align-right" : ""}><span>{item}</span></div>)}</section>;
+  return <section className="stack-wall" aria-label="Engineering stack">{["REACT", "NODE", "MSSQL", "JAVASCRIPT", "TYPESCRIPT", "REST API", "GIT", "NGINX"].map((item, i) => <div key={item} className={i % 2 ? "align-right" : ""}><span>{item}</span></div>)}</section>;
 }
 
 function GithubSection() {
@@ -528,17 +537,17 @@ function GithubSection() {
   database: "MSSQL",
   mindset: "problem solving"
 });`;
-  return <section className="section github-section"><div><div className="section-index">06 / OPEN SOURCE</div><h2 className="display-heading">BUILT IN<br/>PUBLIC</h2><p>Experiments, utilities and product work — documented in code.</p><a className="text-link" href={GITHUB} target="_blank" rel="noreferrer">github.com/manojrajm <ArrowUpRight /></a></div><div className="code-window" aria-label="Visual code example"><div className="code-toolbar"><i/><i/><i/><span>product.ts</span></div><pre><code>{codeSample}</code></pre></div></section>;
+  return <section className="section github-section"><div><div className="section-index">06 / OPEN SOURCE</div><h2 className="display-heading">BUILT IN<br />PUBLIC</h2><p>Experiments, utilities and product work — documented in code.</p><a className="text-link" href={GITHUB} target="_blank" rel="noreferrer">github.com/manojrajm <ArrowUpRight /></a></div><div className="code-window" aria-label="Visual code example"><div className="code-toolbar"><i /><i /><i /><span>product.ts</span></div><pre><code>{codeSample}</code></pre></div></section>;
 }
 
 function Contact() {
-  return <footer id="contact" className="contact-section"><div className="contact-orbit" aria-hidden="true"><i/><i/><i/></div><div className="contact-content"><div className="section-index">07 / CONTACT</div><h2>LET&apos;S BUILD<br/><span>SOMETHING.</span></h2><p>Have an idea, product or engineering problem worth solving?</p><div className="contact-links"><a href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin/> LinkedIn</a><a href={GITHUB} target="_blank" rel="noreferrer"><Github/> GitHub</a><a href={EMAIL}><Mail/> Email</a></div></div><div className="footer-line"><span><span className="brand-accent">M</span>ANOJ<span className="brand-accent">R</span>AJ</span><span>FULL STACK DEVELOPER &amp; LEARNING DEVOPS</span><span>© 2026</span></div></footer>;
+  return <footer id="contact" className="contact-section"><div className="contact-orbit" aria-hidden="true"><i /><i /><i /></div><div className="contact-content"><div className="section-index">07 / CONTACT</div><h2>LET&apos;S BUILD<br /><span>SOMETHING.</span></h2><p>Have an idea, product or engineering problem worth solving?</p><div className="contact-links"><a href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin /> LinkedIn</a><a href={GITHUB} target="_blank" rel="noreferrer"><Github /> GitHub</a><a href={EMAIL}><Mail /> Email</a></div></div><div className="footer-line"><span><span className="brand-accent">M</span>ANOJ<span className="brand-accent">R</span>AJ</span><span>FULL STACK DEVELOPER &amp; LEARNING DEVOPS</span><span>© 2026</span></div></footer>;
 }
 
 export default function PortfolioPage() {
   const reduced = useReducedMotion() ?? false;
   useEffect(() => {
-    let cleanup = () => {};
+    let cleanup = () => { };
     void Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(([gsapModule, triggerModule]) => {
       const gsap = gsapModule.gsap;
       const ScrollTrigger = triggerModule.ScrollTrigger;
@@ -546,7 +555,7 @@ export default function PortfolioPage() {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const ctx = gsap.context(() => {
         gsap.utils.toArray<HTMLElement>(".reveal-text, .section-index, .display-heading").forEach(el => gsap.from(el, { opacity: 0, y: 50, duration: .9, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%" } }));
-        
+
         // About Section: Left-to-Right Slide & Fade-In with GSAP ScrollTrigger
         gsap.fromTo(
           ".about-anim-text",
@@ -622,9 +631,9 @@ export default function PortfolioPage() {
             },
           });
 
-          // 1. Heading, subtitle, and filter bar entrance
+          // 1. Heading, subtitle, and vertical filter dock entrance
           skillsTl.fromTo(
-            ".skills-anim-heading, .skills-anim-sub, .constellation-filter-bar",
+            ".skills-anim-heading, .skills-anim-sub, .skills-vertical-dock",
             { opacity: 0, y: 35, filter: "blur(5px)" },
             {
               opacity: 1,
@@ -700,21 +709,21 @@ export default function PortfolioPage() {
         </ClientOnly>
       </div>
       <AssetLoader3D />
-      <Loader/>
-      <Cursor/>
-      <Navbar/>
+      <Loader />
+      <Cursor />
+      <Navbar />
       <main>
-        <Hero/>
-        <Marquee/>
-        <About/>
-        <Experience/>
-        <Skills/>
-        <Projects/>
-        <Process/>
-        <StackWall/>
-        <GithubSection/>
+        <Hero />
+        <Marquee />
+        <About />
+        <Experience />
+        <Skills />
+        <Projects />
+        <Process />
+        <StackWall />
+        <GithubSection />
       </main>
-      <Contact/>
+      <Contact />
     </div>
   );
 }
