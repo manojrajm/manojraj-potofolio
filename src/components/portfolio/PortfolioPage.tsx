@@ -8,6 +8,7 @@ import { experiencePoints, navItems, projects, skillGroups } from "@/data/portfo
 import { AssetLoader3D } from "./AssetLoader3D";
 import { ParticleText } from "./ParticleText";
 import { SkillIcon } from "./SkillIcons";
+import { Bento16 } from "@/components/blocks/bento-16";
 
 const PersistentExperience = lazy(() => import("@/three/Experience"));
 const GITHUB = "https://github.com/manojrajm";
@@ -522,8 +523,22 @@ function Projects() {
 }
 
 function Process() {
-  const stages = [["01", "DISCOVER", "Understand the workflow and problem."], ["02", "DESIGN", "Turn the workflow into a clear user experience."], ["03", "BUILD", "Develop frontend, APIs, database and integrations."], ["04", "DEPLOY", "Test, optimize and deploy production-ready software."]] as const;
-  return <section className="section process-section"><div className="section-index">05 / PROCESS</div><h2 className="display-heading">FROM IDEA TO<br />PRODUCTION</h2><div className="process-grid">{stages.map(([n, title, copy]) => <article key={title}><span>{n}</span><div className="process-shape" aria-hidden="true" /><h3>{title}</h3><p>{copy}</p></article>)}</div></section>;
+  return (
+    <section id="process" className="section process-isometric-section">
+      <div className="section-index">05 / METHODOLOGY &amp; PROCESS</div>
+      <div className="architecture-header-block">
+        <h2 className="display-heading" style={{ margin: "1.4rem 0 1rem" }}>
+          FROM IDEA TO<br />PRODUCTION
+        </h2>
+        <p className="skills-lede-sub">
+          Interactive isometric methodology stack — scroll or click the 4 tiers to inspect engineering deliverables, architecture artifacts, and reliability standards.
+        </p>
+      </div>
+      <div className="architecture-bento-wrapper">
+        <Bento16 />
+      </div>
+    </section>
+  );
 }
 
 function StackWall() {
@@ -687,6 +702,63 @@ export default function PortfolioPage() {
             "+=0.2"
           );
         }
+
+        // Projects Multi-Plane Parallax & Stacking Recede Engine
+        const projectCards = gsap.utils.toArray<HTMLElement>(".project-card");
+        projectCards.forEach((card, index) => {
+          // 1. Inner Image Parallax Scrub (image glides inside overflow container)
+          const img = card.querySelector<HTMLElement>(".project-image img");
+          if (img) {
+            gsap.fromTo(
+              img,
+              { yPercent: -14 },
+              {
+                yPercent: 14,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: true,
+                },
+              }
+            );
+          }
+
+          // 2. Floating Project Number Counter-Parallax
+          const numBadge = card.querySelector<HTMLElement>(".project-number");
+          if (numBadge) {
+            gsap.to(numBadge, {
+              yPercent: -22,
+              ease: "none",
+              scrollTrigger: {
+                trigger: card,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+              },
+            });
+          }
+
+          // 3. Stacking Card Recede: As card i+1 stacks on top, card i scales down and dims smoothly
+          if (index < projectCards.length - 1) {
+            const nextCard = projectCards[index + 1];
+            if (nextCard) {
+              gsap.to(card, {
+                scale: 0.94,
+                opacity: 0.55,
+                filter: "blur(1.5px) brightness(0.65)",
+                ease: "none",
+                scrollTrigger: {
+                  trigger: nextCard,
+                  start: "top 75%",
+                  end: "top 18%",
+                  scrub: true,
+                },
+              });
+            }
+          }
+        });
 
         gsap.utils.toArray<HTMLElement>(".stack-wall div").forEach((el, i) => gsap.fromTo(el, { xPercent: i % 2 ? 18 : -18, filter: "blur(8px)" }, { xPercent: 0, filter: "blur(0px)", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom center", scrub: 1 } }));
         gsap.to(".marquee-forward span", { xPercent: -18, ease: "none", scrollTrigger: { trigger: ".marquee-section", scrub: 1 } });
