@@ -524,19 +524,8 @@ function Projects() {
 
 function Process() {
   return (
-    <section id="process" className="section process-isometric-section">
-      <div className="section-index">05 / METHODOLOGY &amp; PROCESS</div>
-      <div className="architecture-header-block">
-        <h2 className="display-heading" style={{ margin: "1.4rem 0 1rem" }}>
-          FROM IDEA TO<br />PRODUCTION
-        </h2>
-        <p className="skills-lede-sub">
-          Interactive isometric methodology stack — scroll or click the 4 tiers to inspect engineering deliverables, architecture artifacts, and reliability standards.
-        </p>
-      </div>
-      <div className="architecture-bento-wrapper">
-        <Bento16 />
-      </div>
+    <section id="process" className="process-outer-section">
+      <Bento16 />
     </section>
   );
 }
