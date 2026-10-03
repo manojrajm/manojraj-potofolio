@@ -827,28 +827,28 @@ export function createWaveClip(
     // Right ForeArm vertical with axial supination so palm faces directly forward at camera
     createRelativeQuatTrack("RightForeArm", restQuats, times, [
       [0, 0, -0.22],
-      [-0.45, 0.65, -0.65],
-      [-1.45, 0.45, -1.05],
-      [-1.45, 0.45, -1.05],
-      [-1.45, 0.45, -1.05],
-      [-1.45, 0.45, -1.05],
-      [-1.45, 0.45, -1.05],
-      [-1.45, 0.45, -1.05],
-      [-0.45, 0.65, -0.65],
+      [-0.60, -0.05, -0.45],
+      [-1.65, -0.10, -0.85],
+      [-1.65, -0.10, -0.85],
+      [-1.65, -0.10, -0.85],
+      [-1.65, -0.10, -0.85],
+      [-1.65, -0.10, -0.85],
+      [-1.65, -0.10, -0.85],
+      [-0.60, -0.05, -0.45],
       [0, 0, -0.22],
     ]),
-    // Right Hand: palm facing front toward camera, waving cleanly side-to-side
+    // Right Hand: palm facing directly forward at camera (+Z) with upright fingers, waving side-to-side
     createRelativeQuatTrack("RightHand", restQuats, times, [
       [0.05, 0, 0],
-      [0.0, 0, 0],
-      [0.10, 0.0, -0.38], // Wave cycle 1: Tilt right
-      [0.10, 0.0, 0.38],  // Wave cycle 1: Tilt left
-      [0.10, 0.0, -0.38], // Wave cycle 2: Tilt right
-      [0.10, 0.0, 0.38],  // Wave cycle 2: Tilt left
-      [0.10, 0.0, -0.38], // Wave cycle 3: Tilt right
-      [0.10, 0.0, 0.38],  // Wave cycle 3: Tilt left
-      [0.05, 0.0, 0.0],   // Center
-      [0.05, 0, 0],       // Lower to idle
+      [0.60, 0.90, -0.60],
+      [1.15, 1.80, -1.20], // Upright wave center, palm facing forward directly at visitor
+      [1.43, 1.80, -1.05], // Wave cycle 1: Tilt right
+      [0.87, 1.80, -1.35], // Wave cycle 1: Tilt left
+      [1.43, 1.80, -1.05], // Wave cycle 2: Tilt right
+      [0.87, 1.80, -1.35], // Wave cycle 2: Tilt left
+      [1.43, 1.80, -1.05], // Wave cycle 3: Tilt right
+      [1.15, 1.80, -1.20], // Wave center
+      [0.05, 0, 0],        // Lower to idle
     ]),
     // Left Arm relaxed at side
     createRelativeQuatTrack("LeftArm", restQuats, times, [

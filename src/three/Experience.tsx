@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import { CameraController } from "./camera/CameraController";
 import { CharacterController } from "./character/CharacterController";
 import { StudioEnvironment } from "./environment/StudioEnvironment";
-import { HolographicGlobe } from "./globe/HolographicGlobe";
 
 interface ExperienceProps {
   reducedMotion?: boolean;
@@ -12,7 +11,7 @@ interface ExperienceProps {
 /**
  * Experience:
  * Single Persistent 3D R3F Canvas mounting the humanoid character,
- * camera director, studio environment, holographic globe, and section transition manager.
+ * camera director, studio environment, and section transition manager.
  */
 export default function Experience({ reducedMotion = false }: ExperienceProps) {
   return (
@@ -32,10 +31,9 @@ export default function Experience({ reducedMotion = false }: ExperienceProps) {
       {/* Cinematic Camera Controller */}
       <CameraController reducedMotion={reducedMotion} />
 
-      {/* Suspense-bounded Rigged 3D Character & Global Hologram */}
+      {/* Suspense-bounded Rigged 3D Character Experience */}
       <Suspense fallback={null}>
         <CharacterController reducedMotion={reducedMotion} />
-        <HolographicGlobe />
       </Suspense>
     </Canvas>
   );

@@ -573,6 +573,18 @@ function Contact() {
 
   return (
     <footer id="contact" className="contact-section">
+      {/* Background 2D Global Dot Matrix World Map with Neon Purple Radar Hubs */}
+      <div className="contact-map-backdrop" aria-hidden="true">
+        <img
+          src="/images/contact-world-map-dark.png"
+          alt=""
+          className="contact-map-image"
+          width={1024}
+          height={503}
+          loading="lazy"
+        />
+      </div>
+
       <div className="contact-content">
         {/* Telemetry Header Ribbon */}
         <div className="contact-telemetry-row">
@@ -586,13 +598,9 @@ function Contact() {
               <span>COIMBATORE: {timeString} IST</span>
             </div>
           )}
-          <div className="telemetry-pill">
-            <Sparkles className="h-3 w-3 text-purple-400" />
-            <span>RESPONSE SLA: &lt; 4 HOURS</span>
-          </div>
+
         </div>
 
-        <div className="section-index text-[11px]">07 / CONTACT &amp; GLOBAL REACH</div>
 
         <h2 className="contact-main-heading">
           LET&apos;S BUILD<br />
@@ -604,7 +612,7 @@ function Contact() {
         </p>
 
         {/* 1-Click Interactive Copy Email Action Card */}
-        <div className="contact-email-bar">
+        {/* <div className="contact-email-bar">
           <div className="contact-email-address">
             <Mail className="h-4 w-4 text-purple-400 shrink-0" />
             <span className="font-mono text-xs sm:text-sm text-neutral-200">
@@ -629,7 +637,7 @@ function Contact() {
               </>
             )}
           </button>
-        </div>
+        </div> */}
 
         {/* Direct Connect Actions */}
         <div className="contact-links">
