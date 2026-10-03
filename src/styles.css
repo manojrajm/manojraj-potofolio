@@ -48,11 +48,358 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .section-index, .eyebrow { color: var(--muted-foreground); font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
 .display-heading { margin: 1.4rem 0 4rem; font-family: var(--font-display); font-size: clamp(3.7rem, 10vw, 10rem); line-height: .82; letter-spacing: 0; text-transform: uppercase; }
 
-.loader { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--background); }
-.loader-mark { font: 400 clamp(4rem, 10vw, 8rem)/1 var(--font-display); }
-.loader-name { position: absolute; bottom: 2rem; left: 2rem; font-size: .75rem; font-weight: 700; letter-spacing: .18em; }
-.loader-name span { display: block; margin-top: .35rem; color: var(--muted-foreground); font-size: .55rem; }
-.loader-progress { position: absolute; right: 2rem; bottom: 2rem; color: var(--muted-foreground); font-size: .72rem; }
+/* ==========================================================================
+   Cyber Terminal Developer Boot Loader
+   ========================================================================== */
+.terminal-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at 60% 30%, #0d061f 0%, #05020c 60%, #020106 100%);
+  color: #e2e8f0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Subtle CRT Terminal Scanline */
+.terminal-loader-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(rgba(18, 16, 26, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 10;
+  opacity: 0.45;
+}
+
+/* Terminal Header */
+.terminal-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.75rem;
+  background: rgba(10, 6, 22, 0.75);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  z-index: 2;
+}
+
+.terminal-traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terminal-traffic-lights .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.terminal-traffic-lights .dot-red { background: #ef4444; box-shadow: 0 0 6px rgba(239, 68, 68, 0.6); }
+.terminal-traffic-lights .dot-yellow { background: #f59e0b; box-shadow: 0 0 6px rgba(245, 158, 11, 0.6); }
+.terminal-traffic-lights .dot-green { background: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.6); }
+
+.terminal-header-title {
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+}
+.terminal-host { color: #c084fc; font-weight: 600; }
+.terminal-sep { color: #64748b; margin: 0 0.25rem; }
+.terminal-path { color: #38bdf8; }
+
+.terminal-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.65rem;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 999px;
+}
+.terminal-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulseDot 1.4s infinite;
+}
+.terminal-badge-text {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #6ee7b7;
+}
+
+/* Terminal Body Grid */
+.terminal-body-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.25fr 0.85fr;
+  gap: 2.5rem;
+  padding: 1.75rem 2.25rem;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* Left Pane: Boot Telemetry Stream */
+.terminal-logs-pane {
+  background: rgba(8, 4, 18, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+.terminal-logs-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.terminal-log-line {
+  display: flex;
+  align-items: baseline;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  white-space: nowrap;
+}
+
+.log-timestamp {
+  color: #eab308;
+  margin-right: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.log-type {
+  width: 5.5rem;
+  margin-right: 0.5rem;
+  text-transform: lowercase;
+  font-weight: 600;
+}
+.log-type-sys { color: #f97316; }
+.log-type-font { color: #38bdf8; }
+.log-type-mesh { color: #c084fc; }
+.log-type-tex { color: #a78bfa; }
+.log-type-shader { color: #06b6d4; }
+.log-type-devops { color: #ec4899; }
+.log-type-r3f { color: #818cf8; }
+.log-type-status { color: #34d399; }
+.log-type-ready { color: #10b981; font-weight: 700; }
+
+.log-asset {
+  color: #cbd5e1;
+}
+
+.log-dots {
+  flex: 1;
+  color: #334155;
+  margin: 0 0.5rem;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.log-status {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.terminal-cursor-line {
+  display: flex;
+  align-items: center;
+  font-size: 0.76rem;
+  margin-top: 0.25rem;
+  color: #94a3b8;
+}
+.terminal-cursor-char {
+  color: #38bdf8;
+  margin-left: 0.5rem;
+  font-weight: 700;
+}
+
+/* Right Pane: Big ASCII "MR" & Code Matrix */
+.terminal-right-pane {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.terminal-ascii-wrapper {
+  background: rgba(14, 8, 30, 0.7);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 35px rgba(168, 85, 247, 0.12);
+}
+
+.terminal-ascii-art {
+  margin: 0;
+  font-size: clamp(0.72rem, 1.4vw, 0.95rem);
+  line-height: 1.15;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.ascii-gradient-text {
+  background: linear-gradient(135deg, #c084fc 0%, #38bdf8 65%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px rgba(192, 132, 252, 0.55));
+}
+
+.terminal-sub-branding {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+.brand-primary { color: #c084fc; }
+.brand-secondary { color: #f8fafc; }
+.brand-dot { color: #64748b; }
+.brand-caption { color: #38bdf8; font-size: 0.64rem; }
+
+/* Live Code Box */
+.terminal-code-box {
+  flex: 1;
+  background: rgba(8, 4, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.code-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.68rem;
+  color: #64748b;
+  letter-spacing: 0.08em;
+}
+.code-box-file { color: #94a3b8; font-weight: 600; }
+.code-box-lang { color: #38bdf8; }
+
+.code-box-content {
+  flex: 1;
+  margin: 0;
+  padding: 0.85rem 1rem;
+  font-size: 0.70rem;
+  line-height: 1.6;
+  overflow-y: auto;
+}
+.code-row {
+  display: flex;
+  gap: 0.85rem;
+}
+.code-lineno {
+  color: #475569;
+  user-select: none;
+}
+.code-text {
+  color: #a5f3fc;
+}
+
+/* System Spec Matrix HUD */
+.terminal-matrix-hud {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+.hud-metric {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.hud-metric-label {
+  font-size: 0.58rem;
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.hud-metric-val {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+/* Terminal Footer */
+.terminal-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.75rem;
+  background: rgba(10, 6, 22, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  z-index: 2;
+}
+
+.terminal-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.footer-label { color: #94a3b8; font-weight: 700; }
+.footer-bar { color: #38bdf8; font-weight: 700; }
+.footer-percent { color: #10b981; font-weight: 700; }
+
+.terminal-footer-right {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+/* Responsive Adaptations */
+@media (max-width: 900px) {
+  .terminal-body-grid {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  .terminal-right-pane {
+    order: -1;
+  }
+  .terminal-ascii-art {
+    font-size: 0.62rem;
+  }
+  .terminal-matrix-hud {
+    grid-template-columns: 1fr;
+  }
+  .terminal-footer-bar {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+}
 
 /* Minimalist 3D Asset Loading Pill */
 .asset-loader-badge {

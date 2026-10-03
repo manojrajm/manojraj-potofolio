@@ -5,7 +5,7 @@ import { lazy, Suspense, useEffect, useRef, useState, type MouseEvent as ReactMo
 import { Button } from "@/components/ui/button";
 import { experiencePoints, navItems, projects, skillGroups } from "@/data/portfolio";
 
-import { AssetLoader3D } from "./AssetLoader3D";
+import { TerminalLoader } from "./TerminalLoader";
 import { ParticleText } from "./ParticleText";
 import { SkillIcon } from "./SkillIcons";
 import { Bento16 } from "@/components/blocks/bento-16";
@@ -29,24 +29,6 @@ function MagneticLink({ href, children, external = false, variant = "cinematic" 
       </a>
     </Button>
   );
-}
-
-function Loader() {
-  const [visible, setVisible] = useState(true);
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    const start = performance.now();
-    let frame = 0;
-    const tick = (time: number) => {
-      const next = Math.min(100, Math.round(((time - start) / 900) * 100));
-      setProgress(next);
-      if (next < 100) frame = requestAnimationFrame(tick);
-      else window.setTimeout(() => setVisible(false), 180);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, []);
-  return <AnimatePresence>{visible && <motion.div className="loader" initial={{ y: 0 }} exit={{ y: "-100%" }} transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}><div className="loader-mark"><span className="brand-accent">M</span><span className="brand-accent">R</span></div><div className="loader-name"><span className="brand-accent">M</span><span className="name-white">ANOJ</span><span className="brand-accent">R</span><span className="name-white">AJ</span> <span>FULL STACK DEVELOPER &amp; LEARNING DEVOPS</span></div><div className="loader-progress">{String(progress).padStart(3, "0")}%</div></motion.div>}</AnimatePresence>;
 }
 
 function Cursor() {
@@ -885,8 +867,7 @@ export default function PortfolioPage() {
           </Suspense>
         </ClientOnly>
       </div>
-      <AssetLoader3D />
-      <Loader />
+      <TerminalLoader />
       <Cursor />
       <Navbar />
       <main>
