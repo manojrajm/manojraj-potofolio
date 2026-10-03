@@ -28,12 +28,14 @@ export function CameraController({
     const expEl = document.getElementById("experience");
     const skillsEl = document.getElementById("skills");
     const projectsEl = document.getElementById("projects");
+    const processEl = document.getElementById("process");
     const contactEl = document.getElementById("contact");
 
     const aboutTop = aboutEl ? aboutEl.getBoundingClientRect().top : winH * 2;
     const expTop = expEl ? expEl.getBoundingClientRect().top : winH * 2;
     const skillsTop = skillsEl ? skillsEl.getBoundingClientRect().top : winH * 2;
     const projectsTop = projectsEl ? projectsEl.getBoundingClientRect().top : winH * 2;
+    const processTop = processEl ? processEl.getBoundingClientRect().top : winH * 2;
     const contactTop = contactEl ? contactEl.getBoundingClientRect().top : winH * 2;
 
     // Default Camera Target (Hero Section)
@@ -72,20 +74,28 @@ export function CameraController({
       camZ = 6.4;
       lookX = 0.2;
       lookY = 0.05;
-    } else if (contactTop > winH * 0.55) {
+    } else if (processTop > winH * 0.45) {
       // 5. Projects: Framing cards and character
       camX = -0.3;
       camY = 0.0;
       camZ = 6.9;
       lookX = 0.4;
       lookY = 0.3;
+    } else if (contactTop > winH * 0.55) {
+      // 6. Process Section:
+      // Perfectly centered mid-screen framing, wide lens to view character and bento card harmoniously
+      camX = 0.0;
+      camY = 0.0;
+      camZ = 7.0;
+      lookX = 0.0;
+      lookY = 0.25;
     } else {
-      // 6. Contact: Intimate close-up for final wave
+      // 7. Contact: Balanced framing, head and full body kept comfortably in view!
       camX = 0.0;
       camY = -0.05;
-      camZ = 5.9;
+      camZ = 6.75;
       lookX = 0.0;
-      lookY = 0.35;
+      lookY = 0.32;
     }
 
     // Subtle cursor parallax

@@ -3,7 +3,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { Humanoid } from "./Humanoid";
 
-export type SectionType = "hero" | "about" | "experience" | "skills" | "projects" | "contact";
+export type SectionType = "hero" | "about" | "experience" | "skills" | "projects" | "process" | "contact";
 
 interface CharacterControllerProps {
   reducedMotion?: boolean;
@@ -37,12 +37,14 @@ export function CharacterController({
     const expEl = document.getElementById("experience");
     const skillsEl = document.getElementById("skills");
     const projectsEl = document.getElementById("projects");
+    const processEl = document.getElementById("process");
     const contactEl = document.getElementById("contact");
 
     const aboutTop = aboutEl ? aboutEl.getBoundingClientRect().top : winH * 2;
     const expTop = expEl ? expEl.getBoundingClientRect().top : winH * 2;
     const skillsTop = skillsEl ? skillsEl.getBoundingClientRect().top : winH * 2;
     const projectsTop = projectsEl ? projectsEl.getBoundingClientRect().top : winH * 2;
+    const processTop = processEl ? processEl.getBoundingClientRect().top : winH * 2;
     const contactTop = contactEl ? contactEl.getBoundingClientRect().top : winH * 2;
 
     // Default Targets (Hero Section)
@@ -105,7 +107,7 @@ export function CharacterController({
       targetZ = isMobile ? -0.3 : 0.35;
       targetRotY = THREE.MathUtils.lerp(Math.PI * 2.0 - 0.35, Math.PI * 4.0 + 0.48, progress) + (pointer.x * 0.12);
       targetScale = isMobile ? 1.25 : 1.55;
-    } else if (contactTop > winH * 0.55) {
+    } else if (processTop > winH * 0.45) {
       // 5. PROJECTS SECTION:
       // Glides to side (+1.8), attentive stance observing selected work
       nextSection = "projects";
@@ -116,18 +118,57 @@ export function CharacterController({
       targetZ = isMobile ? -0.4 : 0.25;
       targetRotY = THREE.MathUtils.lerp(Math.PI * 4.0, Math.PI * 3.8, progress) + (pointer.x * 0.15);
       targetScale = isMobile ? 1.35 : 1.8;
+    } else if (contactTop > winH * 0.55) {
+      // 6. PROCESS SECTION (and transition through StackWall & Github):
+      // Mid-screen centered position, harmonized with Bento card and circular floor pedestal
+      nextSection = "process";
+      const stage = (typeof window !== "undefined" && typeof (window as any).__processActiveStage === "number")
+        ? (window as any).__processActiveStage
+        : 0;
+      const stageProgress = (typeof window !== "undefined" && typeof (window as any).__processProgress === "number")
+        ? (window as any).__processProgress
+        : 0;
+
+      // Centered at mid-screen with comfortable scale (1.55) so head and pedestal are always in frame!
+      targetX = isMobile ? 0 : 0.0;
+      targetY = isMobile ? -1.0 : -1.05;
+      targetZ = isMobile ? -0.35 : 0.22;
+      targetScale = isMobile ? 1.25 : 1.55;
+
+      // Choreographed movements for every scroll stage:
+      if (stage === 0) {
+        // Stage 01: Discover (Cyan) -> Holographic summon gesture pointing towards Discover slab
+        nextAnim = "ABOUT_POINT";
+        targetRotY = THREE.MathUtils.lerp(Math.PI * 3.8, Math.PI * 3.92, stageProgress * 4) + (pointer.x * 0.1);
+      } else if (stage === 1) {
+        // Stage 02: Design (Fuchsia) -> Spatial UI presentation gesture
+        nextAnim = "SKILLS_PRESENT";
+        targetRotY = Math.PI * 4.0 + (pointer.x * 0.12);
+      } else if (stage === 2) {
+        // Stage 03: Build (Purple) -> Coding stance / terminal engineering gesture
+        nextAnim = "TECH_GESTURE";
+        targetRotY = Math.PI * 4.0 - 0.08 + (pointer.x * 0.1);
+      } else {
+        // Stage 04: Deploy (Emerald) -> Production launch gesture / final confident rest pose
+        if (stageProgress > 0.94) {
+          nextAnim = "FINAL_POSE";
+        } else {
+          nextAnim = "PROJECTS_INSPECT";
+        }
+        targetRotY = Math.PI * 4.0 + (pointer.x * 0.12);
+      }
     } else {
-      // 6. CONTACT SECTION:
-      // Glides back to DEAD CENTER (0.0), faces directly forward
-      // Waving hand greeting in completion of the portfolio journey!
+      // 7. CONTACT SECTION:
+      // Glides to center, waving greeting in completion of portfolio journey!
+      // Scale is kept balanced (1.56) and depth (0.32) so head and feet remain in frame like 1st img!
       nextSection = "contact";
       nextAnim = "WAVE";
       const progress = Math.min(1, Math.max(0, 1 - contactTop / (winH * 0.55)));
-      targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.8, 0.0, progress);
+      targetX = isMobile ? 0 : 0.0;
       targetY = isMobile ? -0.95 : -1.05;
-      targetZ = isMobile ? -0.3 : 0.82;
+      targetZ = isMobile ? -0.3 : 0.32;
       targetRotY = THREE.MathUtils.lerp(Math.PI * 3.8, Math.PI * 4.0, progress) + (pointer.x * -0.15);
-      targetScale = isMobile ? 1.45 : 1.9;
+      targetScale = isMobile ? 1.35 : 1.56;
     }
 
     // State notification on change

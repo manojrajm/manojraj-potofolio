@@ -71,12 +71,14 @@ function RiggedCharacterModel({ reducedMotion = false }: CharacterModelProps) {
     const expEl = document.getElementById("experience");
     const skillsEl = document.getElementById("skills");
     const projectsEl = document.getElementById("projects");
+    const processEl = document.getElementById("process");
     const contactEl = document.getElementById("contact");
 
     const aboutTop = aboutEl ? aboutEl.getBoundingClientRect().top : winH * 2;
     const expTop = expEl ? expEl.getBoundingClientRect().top : winH * 2;
     const skillsTop = skillsEl ? skillsEl.getBoundingClientRect().top : winH * 2;
     const projectsTop = projectsEl ? projectsEl.getBoundingClientRect().top : winH * 2;
+    const processTop = processEl ? processEl.getBoundingClientRect().top : winH * 2;
     const contactTop = contactEl ? contactEl.getBoundingClientRect().top : winH * 2;
 
     // 1. World Transform Targets
@@ -161,7 +163,7 @@ function RiggedCharacterModel({ reducedMotion = false }: CharacterModelProps) {
       rightArmOffsetY = 0.25;
       leftArmOffsetZ = -0.2;
       leftArmOffsetY = -0.1;
-    } else if (contactTop > winH * 0.55) {
+    } else if (processTop > winH * 0.45) {
       // 5. PROJECTS SECTION:
       // Right side observation pose
       const t = Math.min(1, Math.max(0, 1 - (projectsTop / (winH * 0.45))));
@@ -174,20 +176,61 @@ function RiggedCharacterModel({ reducedMotion = false }: CharacterModelProps) {
       leftArmOffsetZ = -1.05;
       rightArmOffsetZ = 0.55;
       rightForeArmOffsetX = 1.25;
+    } else if (contactTop > winH * 0.55) {
+      // 6. PROCESS SECTION:
+      // Mid-screen centered, stage-synced actions for 4 scrolls (Discover -> Design -> Build -> Deploy)
+      const stage = (typeof window !== "undefined" && typeof (window as any).__processActiveStage === "number")
+        ? (window as any).__processActiveStage
+        : 0;
+
+      targetX = isMobile ? 0 : 0.0;
+      targetY = isMobile ? -0.95 : -1.05;
+      targetZ = isMobile ? -0.4 : 0.22;
+      targetRotY = Math.PI * 2.0 + (pointer.x * 0.1);
+      targetScale = isMobile ? 1.25 : 1.55;
+
+      if (stage === 0) {
+        // Stage 01: Discover (Cyan) -> Left hand raised in holographic summon gesture
+        leftArmOffsetZ = -0.4;
+        leftArmOffsetX = 0.5;
+        leftForeArmOffsetX = 0.8;
+        rightArmOffsetZ = 1.05;
+      } else if (stage === 1) {
+        // Stage 02: Design (Fuchsia) -> Right arm gestures across UI canvas
+        rightArmOffsetZ = 0.5;
+        rightArmOffsetY = 0.3;
+        rightForeArmOffsetX = 0.9;
+        leftArmOffsetZ = -0.8;
+      } else if (stage === 2) {
+        // Stage 03: Build (Purple) -> Both forearms forward in active coding stance
+        const typeWiggle = Math.sin(time * 6.0) * 0.04;
+        leftArmOffsetX = 0.7 + typeWiggle;
+        rightArmOffsetX = 0.7 - typeWiggle;
+        leftForeArmOffsetX = 0.7;
+        rightForeArmOffsetX = 0.7;
+        leftArmOffsetZ = -0.3;
+        rightArmOffsetZ = 0.3;
+      } else {
+        // Stage 04: Deploy (Emerald) -> Pointing upward towards launch / cloud SLA
+        rightArmOffsetZ = 0.35;
+        rightArmOffsetX = 0.6;
+        rightForeArmOffsetX = 1.1;
+        leftArmOffsetZ = -1.05;
+      }
     } else {
-      // 6. CONTACT SECTION:
-      // Centered facing forward, waving greeting gesture!
+      // 7. CONTACT SECTION:
+      // Centered facing forward, waving greeting gesture! Kept at comfortable scale!
       const t = Math.min(1, Math.max(0, 1 - (contactTop / (winH * 0.55))));
       targetX = isMobile ? 0 : THREE.MathUtils.lerp(1.85, 0.0, t);
       targetY = isMobile ? -0.95 : -1.05;
-      targetZ = isMobile ? -0.4 : 0.85;
-      targetRotY = THREE.MathUtils.lerp(Math.PI * 1.8, Math.PI * 2.0, t) + (pointer.x * -0.2);
-      targetScale = isMobile ? 1.45 : 1.9;
+      targetZ = isMobile ? -0.4 : 0.32;
+      targetRotY = THREE.MathUtils.lerp(Math.PI * 1.8, Math.PI * 2.0, t) + (pointer.x * -0.15);
+      targetScale = isMobile ? 1.35 : 1.56;
 
       // Waving arm greeting!
       rightArmOffsetZ = 2.05;
       rightForeArmOffsetX = 0.35;
-      rightHandOffsetZ = Math.sin(time * 6.5) * 0.4; // Hand waving left-to-right!
+      rightHandOffsetZ = Math.sin(time * 6.5) * 0.4;
       leftArmOffsetZ = -1.05;
     }
 

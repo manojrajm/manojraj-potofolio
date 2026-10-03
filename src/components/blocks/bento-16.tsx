@@ -169,14 +169,21 @@ export function Bento16({
         setScrollProgress(p);
 
         // 4 equal scroll intervals for the 4 stages
+        let stageIdx = 0;
         if (p < 0.25) {
-          setActiveStage(0); // 01 Discover
+          stageIdx = 0; // 01 Discover
         } else if (p < 0.50) {
-          setActiveStage(1); // 02 Design
+          stageIdx = 1; // 02 Design
         } else if (p < 0.75) {
-          setActiveStage(2); // 03 Build
+          stageIdx = 2; // 03 Build
         } else {
-          setActiveStage(3); // 04 Deploy
+          stageIdx = 3; // 04 Deploy
+        }
+        setActiveStage(stageIdx);
+
+        if (typeof window !== "undefined") {
+          (window as any).__processActiveStage = stageIdx;
+          (window as any).__processProgress = p;
         }
       },
     });
@@ -201,6 +208,10 @@ export function Bento16({
 
   const jumpToStage = (idx: number) => {
     setActiveStage(idx);
+    if (typeof window !== "undefined") {
+      (window as any).__processActiveStage = idx;
+      (window as any).__processProgress = idx / 3.0;
+    }
     const sectionEl = sectionRef.current;
     if (!sectionEl) return;
     const trigger = ScrollTrigger.getById(sectionEl.id) || ScrollTrigger.getAll().find(st => st.trigger === sectionEl);
@@ -213,9 +224,9 @@ export function Bento16({
   const defaultStage = processStages[0] as ProcessStageItem;
   const currentStage: ProcessStageItem = stages[activeStage] ?? stages[0] ?? defaultStage;
 
-  // Isometric Slab Vertical Anchoring
-  const baseAnchorY = 224;
-  const layerSpacing = 46; // Always spread in exploded architectural view
+  // Isometric Slab Vertical Anchoring (compacted to fit screen height perfectly)
+  const baseAnchorY = 205;
+  const layerSpacing = 36; // Perfectly spaced exploded architectural view
 
   return (
     <div 
@@ -225,16 +236,16 @@ export function Bento16({
       {/* Pinned Stage Container (Stays fixed in viewport during scroll) */}
       <div 
         ref={pinTargetRef}
-        className="process-pin-container flex flex-col justify-center w-full min-h-screen max-w-[1440px] mx-auto px-4 sm:px-8 py-4 overflow-hidden"
+        className="process-pin-container"
       >
         {/* Section Header */}
-        <div className="process-header-block mb-3 sm:mb-4">
-          <div className="section-index">05 / METHODOLOGY &amp; ARCHITECTURE</div>
-          <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <div className="process-header-block mb-1.5 sm:mb-2">
+          <div className="section-index text-[11px]">05 / METHODOLOGY &amp; ARCHITECTURE</div>
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h2 className="display-heading process-display-heading">
-              FROM IDEA TO<br />PRODUCTION
+              FROM IDEA TO PRODUCTION
             </h2>
-            <div className="flex items-center gap-2 font-mono text-xs text-neutral-400">
+            <div className="flex items-center gap-2 font-mono text-[11px] text-neutral-400">
               <span className="flex h-2 w-2 rounded-full bg-purple-500 animate-pulse" />
               <span>Scroll {activeStage + 1} of 4 • {currentStage.label}</span>
             </div>
@@ -260,16 +271,16 @@ export function Bento16({
           />
 
           {/* Top Progress & Navigation Ribbon */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-800/80 bg-neutral-900/60 px-5 py-3 sm:px-8">
-            <div className="flex items-center gap-2.5">
-              <Workflow className="h-4 w-4 text-purple-400" />
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-300">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-800/80 bg-neutral-900/60 px-4 py-2 sm:px-6">
+            <div className="flex items-center gap-2">
+              <Workflow className="h-3.5 w-3.5 text-purple-400" />
+              <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-neutral-300">
                 Continuous Full-Stack Pipeline
               </span>
             </div>
 
             {/* 4 Clickable Stage Selector Tabs */}
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
               {stages.map((stage, idx) => {
                 const isActive = activeStage === idx;
                 return (
@@ -277,7 +288,7 @@ export function Bento16({
                     key={stage.id}
                     type="button"
                     onClick={() => jumpToStage(idx)}
-                    className={`relative inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold tracking-wider transition-all duration-200 cursor-pointer ${
+                    className={`relative inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold tracking-wider transition-all duration-200 cursor-pointer ${
                       isActive
                         ? "text-white shadow-sm border"
                         : "text-neutral-400 hover:text-neutral-200 border border-transparent hover:bg-neutral-800/50"
@@ -285,17 +296,17 @@ export function Bento16({
                     style={{
                       borderColor: isActive ? stage.color : "transparent",
                       backgroundColor: isActive ? "#181429" : "transparent",
-                      boxShadow: isActive ? `0 0 14px ${stage.glowColor}` : "none",
+                      boxShadow: isActive ? `0 0 12px ${stage.glowColor}` : "none",
                     }}
                   >
                     <span 
                       className="h-1.5 w-1.5 rounded-full"
                       style={{
                         backgroundColor: isActive ? stage.color : "#525252",
-                        boxShadow: isActive ? `0 0 8px ${stage.color}` : "none"
+                        boxShadow: isActive ? `0 0 6px ${stage.color}` : "none"
                       }}
                     />
-                    <span className="font-mono text-[11px]">{stage.step}</span>
+                    <span className="font-mono text-[10px]">{stage.step}</span>
                     <span>{stage.label}</span>
                   </button>
                 );
@@ -304,27 +315,27 @@ export function Bento16({
           </div>
 
           {/* Scroll Progress Bar */}
-          <div className="relative h-1 w-full bg-neutral-900 overflow-hidden">
+          <div className="relative h-[3px] w-full bg-neutral-900 overflow-hidden">
             <div 
               className="h-full transition-all duration-150 ease-out"
               style={{
                 width: `${Math.min(100, Math.max(5, scrollProgress * 100))}%`,
                 background: `linear-gradient(90deg, #38bdf8, #f472b6, #a855f7, #34d399)`,
-                boxShadow: `0 0 10px ${currentStage.color}`
+                boxShadow: `0 0 8px ${currentStage.color}`
               }}
             />
           </div>
 
           {/* Main 2-Column Responsive Body */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-5 sm:p-7 lg:p-8 items-center min-h-[440px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 p-3.5 sm:p-5 lg:p-6 items-center flex-1 overflow-hidden">
             
             {/* LEFT COLUMN: 3D Isometric 4-Layer Stack (Always visible, pinned on screen) */}
-            <div className="lg:col-span-5 relative flex flex-col items-center justify-center min-h-[340px] sm:min-h-[380px] rounded-2xl border border-neutral-800/60 bg-neutral-900/30 p-3 sm:p-4">
+            <div className="lg:col-span-5 relative flex flex-col items-center justify-center min-h-[280px] sm:min-h-[300px] rounded-xl border border-neutral-800/60 bg-neutral-900/30 p-2 sm:p-3">
               
               {/* Radial Dotted Matrix Grid */}
               <div 
                 aria-hidden="true" 
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgb(168_85_247/0.14)_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_at_center,black_45%,transparent_80%)]"
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgb(168_85_247/0.14)_1px,transparent_1px)] [background-size:14px_14px] [mask-image:radial-gradient(ellipse_at_center,black_45%,transparent_80%)]"
               />
 
               {/* 3D Motion Perspective Viewport */}
@@ -332,34 +343,34 @@ export function Bento16({
                 onPointerMove={handlePointerMove}
                 onPointerEnter={() => setIsHovered(true)}
                 onPointerLeave={handlePointerLeave}
-                className="relative flex h-full w-full items-center justify-center [perspective:900px]"
+                className="relative flex h-full w-full items-center justify-center [perspective:850px]"
               >
                 {/* Parallax Container with Mouse Tilt */}
                 <motion.div
                   style={{ 
                     rotateX: reducedMotion ? 0 : rotateX, 
                     rotateY: reducedMotion ? 0 : rotateY, 
-                    width: 250, 
-                    height: 290 
+                    width: 230, 
+                    height: 250 
                   }}
-                  className="relative shrink-0 scale-[0.92] sm:scale-100 lg:scale-[1.08] [transform-style:preserve-3d]"
+                  className="relative shrink-0 scale-[0.82] sm:scale-[0.88] lg:scale-[0.92] [transform-style:preserve-3d]"
                 >
                   {/* Dashed Orbital Guide */}
                   <div 
                     aria-hidden="true" 
-                    className="absolute inset-[16px] rounded-full border border-dashed border-purple-500/25 motion-safe:animate-[spin_70s_linear_infinite]"
+                    className="absolute inset-[14px] rounded-full border border-dashed border-purple-500/25 motion-safe:animate-[spin_70s_linear_infinite]"
                   />
                   {/* Stage-Synced Center Glow */}
                   <div 
                     aria-hidden="true" 
-                    className="absolute inset-[36px] rounded-full blur-2xl transition-all duration-500"
+                    className="absolute inset-[32px] rounded-full blur-2xl transition-all duration-500"
                     style={{ backgroundColor: currentStage.glowColor }}
                   />
 
                   {/* Isometric 4-Layer Stack SVG */}
                   <svg 
                     aria-hidden="true" 
-                    viewBox="0 0 250 290" 
+                    viewBox="0 0 240 250" 
                     className="absolute inset-0 h-full w-full overflow-visible"
                   >
                     {stages.map((stage, idx) => {
@@ -377,13 +388,13 @@ export function Bento16({
                           onClick={() => jumpToStage(idx)}
                           className="cursor-pointer transition-transform duration-300"
                           style={{
-                            transform: `translateY(${targetY - baseAnchorY + (isSelected ? -6 : 0)}px) scale(${isSelected ? 1.03 : 1})`,
-                            transformOrigin: "125px 224px",
+                            transform: `translateY(${targetY - baseAnchorY + (isSelected ? -5 : 0)}px) scale(${isSelected ? 1.025 : 1})`,
+                            transformOrigin: "120px 205px",
                           }}
                         >
                           {/* Left Extruded Face */}
                           <path
-                            d={`M60 ${baseAnchorY} L125 ${baseAnchorY + 28} V${baseAnchorY + 28 + 10} L60 ${baseAnchorY + 10} Z`}
+                            d={`M56 ${baseAnchorY} L120 ${baseAnchorY + 26} V${baseAnchorY + 26 + 9} L56 ${baseAnchorY + 9} Z`}
                             className="transition-colors duration-300"
                             style={{
                               fill: isSelected ? stage.color : "#1a152e"
@@ -392,7 +403,7 @@ export function Bento16({
 
                           {/* Right Extruded Face */}
                           <path
-                            d={`M125 ${baseAnchorY + 28} L190 ${baseAnchorY} V${baseAnchorY + 10} L125 ${baseAnchorY + 28 + 10} Z`}
+                            d={`M120 ${baseAnchorY + 26} L184 ${baseAnchorY} V${baseAnchorY + 9} L120 ${baseAnchorY + 26 + 9} Z`}
                             className="transition-colors duration-300"
                             style={{
                               fill: isSelected ? `${stage.color}cc` : "#231c3d"
@@ -401,13 +412,13 @@ export function Bento16({
 
                           {/* Top Isometric Rhombus Face */}
                           <path
-                            d={`M125 ${baseAnchorY - 28} L190 ${baseAnchorY} L125 ${baseAnchorY + 28} L60 ${baseAnchorY} Z`}
+                            d={`M120 ${baseAnchorY - 26} L184 ${baseAnchorY} L120 ${baseAnchorY + 26} L56 ${baseAnchorY} Z`}
                             strokeWidth={1}
                             className="transition-colors duration-300"
                             style={{
                               fill: isSelected ? "#0e0a1f" : "#120e24",
                               stroke: isSelected ? stage.color : "#332a57",
-                              filter: isSelected ? `drop-shadow(0 0 14px ${stage.glowColor})` : "none"
+                              filter: isSelected ? `drop-shadow(0 0 12px ${stage.glowColor})` : "none"
                             }}
                           />
 
@@ -415,22 +426,22 @@ export function Bento16({
                           {[-1, 0, 1].map((step) => (
                             <line
                               key={step}
-                              x1={60 + 32.5 * (step + 1)}
-                              y1={baseAnchorY - 14 * (step + 1)}
-                              x2={125 + 32.5 * (step + 1)}
-                              y2={baseAnchorY + 28 - 14 * (step + 1)}
+                              x1={56 + 32 * (step + 1)}
+                              y1={baseAnchorY - 13 * (step + 1)}
+                              x2={120 + 32 * (step + 1)}
+                              y2={baseAnchorY + 26 - 13 * (step + 1)}
                               stroke={isSelected ? stage.color : "#2b224d"}
-                              strokeWidth={0.75}
-                              strokeOpacity={isSelected ? 0.5 : 0.25}
+                              strokeWidth={0.7}
+                              strokeOpacity={isSelected ? 0.45 : 0.22}
                             />
                           ))}
 
                           {/* Centered Stage Icon */}
                           <IconComponent
-                            x={118}
+                            x={113}
                             y={baseAnchorY - 7}
-                            width={14}
-                            height={14}
+                            width={13}
+                            height={13}
                             strokeWidth={2}
                             className="transition-colors duration-300"
                             style={{
@@ -451,13 +462,13 @@ export function Bento16({
                         type="button"
                         onClick={() => jumpToStage(idx)}
                         style={{
-                          top: baseAnchorY - idx * layerSpacing - 12 + (isSelected ? -6 : 0),
-                          transform: "translateZ(22px)",
+                          top: baseAnchorY - idx * layerSpacing - 10 + (isSelected ? -5 : 0),
+                          transform: "translateZ(20px)",
                           borderColor: isSelected ? stage.color : "rgba(255,255,255,0.1)",
                           backgroundColor: isSelected ? "#120e24" : "rgba(18, 14, 34, 0.85)",
-                          boxShadow: isSelected ? `0 0 16px ${stage.glowColor}` : "none"
+                          boxShadow: isSelected ? `0 0 14px ${stage.glowColor}` : "none"
                         }}
-                        className={`absolute -right-4 sm:-right-8 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-bold tracking-wide shadow-sm transition-all duration-300 cursor-pointer ${
+                        className={`absolute -right-3 sm:-right-6 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide shadow-sm transition-all duration-300 cursor-pointer ${
                           isSelected
                             ? "text-white border scale-105 opacity-100"
                             : "border-neutral-800 text-neutral-400 hover:text-white opacity-70"
@@ -467,7 +478,7 @@ export function Bento16({
                           className="h-1.5 w-1.5 rounded-full"
                           style={{ backgroundColor: stage.color }}
                         />
-                        <span className="font-mono text-[10px]">{stage.step}</span>
+                        <span className="font-mono text-[9px]">{stage.step}</span>
                         <span>{stage.label}</span>
                       </button>
                     );
@@ -475,11 +486,11 @@ export function Bento16({
 
                   {/* Active Stage Callout Pill */}
                   <div
-                    style={{ transform: "translateZ(24px)" }}
-                    className="absolute left-[2%] top-[4%] inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-neutral-800 bg-neutral-950/90 px-3 py-1 font-mono text-[11px] font-semibold text-neutral-300 shadow-md"
+                    style={{ transform: "translateZ(22px)" }}
+                    className="absolute left-[2%] top-[3%] inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-neutral-800 bg-neutral-950/90 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-neutral-300 shadow-md"
                   >
                     <Sparkles 
-                      className="h-3 w-3" 
+                      className="h-2.5 w-2.5" 
                       style={{ color: currentStage.color }}
                     />
                     <span>Layer {currentStage.step} Active</span>
@@ -489,7 +500,7 @@ export function Bento16({
             </div>
 
             {/* RIGHT COLUMN: Parallax Stage Cards Stack (Glides in & out with parallax) */}
-            <div className="lg:col-span-7 relative min-h-[380px] sm:min-h-[420px] flex items-center">
+            <div className="lg:col-span-7 relative min-h-[290px] sm:min-h-[320px] flex items-center">
               
               {stages.map((stage, idx) => {
                 const isActive = activeStage === idx;
@@ -508,21 +519,21 @@ export function Bento16({
                   scale = 1;
                   pointerEvents = "auto";
                 } else if (isPassed) {
-                  yOffset = -45; // Slides up with parallax exit
+                  yOffset = -35; // Slides up with parallax exit
                   opacity = 0;
-                  scale = 0.94;
+                  scale = 0.95;
                   pointerEvents = "none";
                 } else if (isUpcoming) {
-                  yOffset = 45; // Slides up from bottom with parallax entrance
+                  yOffset = 35; // Slides up from bottom with parallax entrance
                   opacity = 0;
-                  scale = 0.94;
+                  scale = 0.95;
                   pointerEvents = "none";
                 }
 
                 return (
                   <div
                     key={stage.id}
-                    className="absolute inset-0 flex flex-col justify-center gap-4 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                    className="absolute inset-0 flex flex-col justify-center gap-2.5 sm:gap-3 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
                     style={{
                       transform: `translateY(${yOffset}px) scale(${scale})`,
                       opacity,
@@ -531,45 +542,45 @@ export function Bento16({
                     }}
                   >
                     {/* Header with Stage Number & Badge */}
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span 
-                        className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs font-extrabold tracking-wider border shadow-sm"
+                        className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[10px] font-extrabold tracking-wider border shadow-sm"
                         style={{
                           color: stage.color,
                           borderColor: `${stage.color}66`,
                           backgroundColor: `${stage.color}15`,
-                          boxShadow: `0 0 14px ${stage.glowColor}`
+                          boxShadow: `0 0 10px ${stage.glowColor}`
                         }}
                       >
                         PHASE {stage.step} • {stage.label}
                       </span>
 
-                      <span className="font-mono text-xs text-neutral-400">
+                      <span className="font-mono text-[10.5px] text-neutral-400">
                         {stage.badge}
                       </span>
                     </div>
 
                     {/* Title & Lede */}
                     <div>
-                      <h3 className="font-display text-2xl sm:text-3xl text-white tracking-tight leading-tight">
+                      <h3 className="font-display text-lg sm:text-xl text-white tracking-tight leading-snug">
                         {stage.title}
                       </h3>
-                      <p className="mt-1.5 text-sm sm:text-base leading-relaxed text-neutral-300 max-w-2xl">
+                      <p className="mt-0.5 text-xs leading-normal text-neutral-300 max-w-xl">
                         {stage.lede}
                       </p>
                     </div>
 
                     {/* Deliverables Checklist Grid */}
-                    <div className="rounded-xl border border-neutral-800/80 bg-neutral-900/40 p-4 sm:p-5">
-                      <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2.5 flex items-center gap-2">
-                        <CheckCircle2 className="h-3.5 w-3.5" style={{ color: stage.color }} />
+                    <div className="rounded-lg border border-neutral-800/80 bg-neutral-900/40 p-2 sm:p-2.5">
+                      <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5 flex items-center gap-1.5">
+                        <CheckCircle2 className="h-3 w-3" style={{ color: stage.color }} />
                         <span>Key Engineering Deliverables</span>
                       </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                         {stage.deliverables.map((item) => (
                           <div 
                             key={item}
-                            className="flex items-start gap-2 text-xs leading-normal text-neutral-300"
+                            className="flex items-start gap-1.5 text-[10.5px] leading-tight text-neutral-300"
                           >
                             <span 
                               className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full"
@@ -582,16 +593,16 @@ export function Bento16({
                     </div>
 
                     {/* Tools & Metric Ribbon */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
                       {/* Tools Ribbon */}
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="font-mono text-[10px] uppercase tracking-wider text-neutral-500 mr-1">
+                      <div className="flex flex-wrap items-center gap-1">
+                        <span className="font-mono text-[9px] uppercase tracking-wider text-neutral-500 mr-0.5">
                           Artifacts:
                         </span>
                         {stage.tools.map((tool) => (
                           <span
                             key={tool}
-                            className="rounded-md border border-neutral-800 bg-neutral-900/80 px-2.5 py-1 font-mono text-[11px] font-semibold text-neutral-300"
+                            className="rounded border border-neutral-800 bg-neutral-900/80 px-2 py-0.5 font-mono text-[10px] font-semibold text-neutral-300"
                           >
                             {tool}
                           </span>
@@ -599,16 +610,16 @@ export function Bento16({
                       </div>
 
                       {/* Metric Guarantee Badge */}
-                      <div className="flex items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900/90 px-3 py-1.5">
-                        <Cpu className="h-3.5 w-3.5" style={{ color: stage.color }} />
+                      <div className="flex items-center gap-1.5 rounded-md border border-neutral-800 bg-neutral-900/90 px-2.5 py-1">
+                        <Cpu className="h-3 w-3" style={{ color: stage.color }} />
                         <div>
                           <span 
-                            className="font-mono text-xs font-bold mr-1.5"
+                            className="font-mono text-[11px] font-bold mr-1"
                             style={{ color: stage.color }}
                           >
                             {stage.metric}
                           </span>
-                          <span className="font-sans text-[11px] text-neutral-400">
+                          <span className="font-sans text-[10px] text-neutral-400">
                             {stage.metricLabel}
                           </span>
                         </div>
@@ -624,7 +635,7 @@ export function Bento16({
           </div>
 
           {/* Bottom Status Ticker */}
-          <div className="border-t border-neutral-800/80 bg-neutral-950/80 px-5 py-3 sm:px-8 flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] text-neutral-400">
+          <div className="border-t border-neutral-800/80 bg-neutral-950/80 px-4 py-2 sm:px-6 flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] sm:text-[11px] text-neutral-400">
             <div className="flex items-center gap-2">
               <span 
                 className="h-2 w-2 rounded-full animate-pulse"
