@@ -227,10 +227,11 @@ function RiggedCharacterModel({ reducedMotion = false }: CharacterModelProps) {
       targetRotY = THREE.MathUtils.lerp(Math.PI * 1.8, Math.PI * 2.0, t) + (pointer.x * -0.15);
       targetScale = isMobile ? 1.35 : 1.56;
 
-      // Waving arm greeting!
-      rightArmOffsetZ = 2.05;
-      rightForeArmOffsetX = 0.35;
-      rightHandOffsetZ = Math.sin(time * 6.5) * 0.4;
+      // Front-facing palm waving greeting!
+      rightArmOffsetZ = 1.95;
+      rightArmOffsetX = -0.45;
+      rightForeArmOffsetX = -1.25;
+      rightHandOffsetZ = Math.sin(time * 6.5) * 0.38;
       leftArmOffsetZ = -1.05;
     }
 

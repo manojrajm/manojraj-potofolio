@@ -1,6 +1,6 @@
 import { ClientOnly } from "@tanstack/react-router";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, ArrowUpRight, Database, Github, Layers, Linkedin, Mail, Menu, Server, X } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Check, Clock, Copy, Database, Github, Globe, Layers, Linkedin, Mail, Menu, Server, Sparkles, X } from "lucide-react";
 import { lazy, Suspense, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { experiencePoints, navItems, projects, skillGroups } from "@/data/portfolio";
@@ -545,7 +545,115 @@ function GithubSection() {
 }
 
 function Contact() {
-  return <footer id="contact" className="contact-section"><div className="contact-orbit" aria-hidden="true"><i /><i /><i /></div><div className="contact-content"><div className="section-index">07 / CONTACT</div><h2>LET&apos;S BUILD<br /><span>SOMETHING.</span></h2><p>Have an idea, product or engineering problem worth solving?</p><div className="contact-links"><a href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin /> LinkedIn</a><a href={GITHUB} target="_blank" rel="noreferrer"><Github /> GitHub</a><a href={EMAIL}><Mail /> Email</a></div></div><div className="footer-line"><span><span className="brand-accent">M</span>ANOJ<span className="brand-accent">R</span>AJ</span><span>FULL STACK DEVELOPER &amp; LEARNING DEVOPS</span><span>© 2026</span></div></footer>;
+  const [copied, setCopied] = useState(false);
+  const [timeString, setTimeString] = useState("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const istOptions: Intl.DateTimeFormatOptions = {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      };
+      setTimeString(new Intl.DateTimeFormat("en-US", istOptions).format(now));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText("gauthamtamizha007@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2400);
+  };
+
+  return (
+    <footer id="contact" className="contact-section">
+      <div className="contact-content">
+        {/* Telemetry Header Ribbon */}
+        <div className="contact-telemetry-row">
+          <div className="telemetry-pill status-available">
+            <span className="telemetry-dot pulse-dot" />
+            <span>AVAILABLE FOR GLOBAL ROLES &amp; CONTRACTS</span>
+          </div>
+          {timeString && (
+            <div className="telemetry-pill">
+              <Clock className="h-3 w-3 text-cyan-400" />
+              <span>COIMBATORE: {timeString} IST</span>
+            </div>
+          )}
+          <div className="telemetry-pill">
+            <Sparkles className="h-3 w-3 text-purple-400" />
+            <span>RESPONSE SLA: &lt; 4 HOURS</span>
+          </div>
+        </div>
+
+        <div className="section-index text-[11px]">07 / CONTACT &amp; GLOBAL REACH</div>
+
+        <h2 className="contact-main-heading">
+          LET&apos;S BUILD<br />
+          <span>SOMETHING.</span>
+        </h2>
+
+        <p className="contact-lede">
+          Have an idea, product, or enterprise engineering problem worth solving? From modern React interfaces to scalable MSSQL &amp; Node.js APIs, and containerized CI/CD pipelines — let&apos;s build it together.
+        </p>
+
+        {/* 1-Click Interactive Copy Email Action Card */}
+        <div className="contact-email-bar">
+          <div className="contact-email-address">
+            <Mail className="h-4 w-4 text-purple-400 shrink-0" />
+            <span className="font-mono text-xs sm:text-sm text-neutral-200">
+              gauthamtamizha007@gmail.com
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={handleCopyEmail}
+            className={`contact-copy-action ${copied ? "is-copied" : ""}`}
+            aria-label="Copy email address"
+          >
+            {copied ? (
+              <>
+                <Check className="h-3.5 w-3.5 text-emerald-400" />
+                <span className="text-emerald-300 font-bold">Copied to Clipboard!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="h-3.5 w-3.5 text-neutral-400" />
+                <span>Copy Email</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Direct Connect Actions */}
+        <div className="contact-links">
+          <a href={LINKEDIN} target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
+            <Linkedin /> LinkedIn
+          </a>
+          <a href={GITHUB} target="_blank" rel="noreferrer" aria-label="GitHub profile">
+            <Github /> GitHub
+          </a>
+          <a href={EMAIL} aria-label="Send direct email">
+            <Mail /> Direct Mail
+          </a>
+        </div>
+      </div>
+
+      <div className="footer-line">
+        <span>
+          <span className="brand-accent">M</span>ANOJ<span className="brand-accent">R</span>AJ
+        </span>
+        <span>FULL STACK DEVELOPER &amp; DEVOPS ARCHITECT</span>
+        <span>© 2026</span>
+      </div>
+    </footer>
+  );
 }
 
 export default function PortfolioPage() {

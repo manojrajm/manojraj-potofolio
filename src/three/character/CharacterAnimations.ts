@@ -761,14 +761,27 @@ export function createWaveClip(
   const openWavingFingers: [number, number, number][] = [
     [0.18, 0, 0],
     [0.10, 0, 0],
-    [0.0, 0, 0],  // Wide open fingers
-    [0.0, 0, 0],  // Wave
-    [0.0, 0, 0],  // Wave
-    [0.0, 0, 0],  // Wave
-    [0.0, 0, 0],  // Wave
-    [0.0, 0, 0],  // Wave
-    [0.05, 0, 0], // Center
-    [0.18, 0, 0], // Lower to idle
+    [-0.05, 0, 0], // Wide open extended fingers
+    [-0.05, 0, 0], // Wave
+    [-0.05, 0, 0], // Wave
+    [-0.05, 0, 0], // Wave
+    [-0.05, 0, 0], // Wave
+    [-0.05, 0, 0], // Wave
+    [0.05, 0, 0],  // Center
+    [0.18, 0, 0],  // Lower to idle
+  ];
+
+  const openWavingThumb: [number, number, number][] = [
+    [0.15, 0, 0],
+    [0.08, 0, 0],
+    [-0.10, 0.25, -0.15], // Natural splayed thumb
+    [-0.10, 0.25, -0.15], // Wave
+    [-0.10, 0.25, -0.15], // Wave
+    [-0.10, 0.25, -0.15], // Wave
+    [-0.10, 0.25, -0.15], // Wave
+    [-0.10, 0.25, -0.15], // Wave
+    [0.05, 0.10, 0],
+    [0.15, 0, 0],
   ];
 
   const tracks: THREE.KeyframeTrack[] = [
@@ -798,44 +811,44 @@ export function createWaveClip(
       [0.10, 0.03, 0.10],
       [0.0, 0, 0],
     ]),
-    // Right Arm raises up high
+    // Right Arm raises up high and slightly outward to right of head
     createRelativeQuatTrack("RightArm", restQuats, times, [
       [0.82, 0, 0],
-      [0.0, 0, -0.5],
-      [-1.15, 0, 0],
-      [-1.15, 0, 0],
-      [-1.15, 0, 0],
-      [-1.15, 0, 0],
-      [-1.15, 0, 0],
-      [-1.15, 0, 0],
-      [0.0, 0, -0.5],
+      [0.0, -0.15, -0.45],
+      [-0.95, -0.25, -0.45],
+      [-0.95, -0.25, -0.45],
+      [-0.95, -0.25, -0.45],
+      [-0.95, -0.25, -0.45],
+      [-0.95, -0.25, -0.45],
+      [-0.95, -0.25, -0.45],
+      [0.0, -0.15, -0.45],
       [0.82, 0, 0],
     ]),
-    // Right ForeArm vertical
+    // Right ForeArm vertical with axial supination so palm faces directly forward at camera
     createRelativeQuatTrack("RightForeArm", restQuats, times, [
       [0, 0, -0.22],
-      [0, 0, -0.65],
-      [0, 0, -1.05],
-      [0, 0, -1.05],
-      [0, 0, -1.05],
-      [0, 0, -1.05],
-      [0, 0, -1.05],
-      [0, 0, -1.05],
-      [0, 0, -0.65],
+      [-0.45, 0.65, -0.65],
+      [-1.45, 0.45, -1.05],
+      [-1.45, 0.45, -1.05],
+      [-1.45, 0.45, -1.05],
+      [-1.45, 0.45, -1.05],
+      [-1.45, 0.45, -1.05],
+      [-1.45, 0.45, -1.05],
+      [-0.45, 0.65, -0.65],
       [0, 0, -0.22],
     ]),
-    // Right Hand 3-cycle wave oscillation:
+    // Right Hand: palm facing front toward camera, waving cleanly side-to-side
     createRelativeQuatTrack("RightHand", restQuats, times, [
       [0.05, 0, 0],
       [0.0, 0, 0],
-      [0.0, 0, -0.42], // Wave cycle 1: Right
-      [0.0, 0, 0.42],  // Wave cycle 1: Left
-      [0.0, 0, -0.42], // Wave cycle 2: Right
-      [0.0, 0, 0.42],  // Wave cycle 2: Left
-      [0.0, 0, -0.42], // Wave cycle 3: Right
-      [0.0, 0, 0.42],  // Wave cycle 3: Left
-      [0.0, 0, 0.0],   // Center
-      [0.05, 0, 0],    // Lower to idle
+      [0.10, 0.0, -0.38], // Wave cycle 1: Tilt right
+      [0.10, 0.0, 0.38],  // Wave cycle 1: Tilt left
+      [0.10, 0.0, -0.38], // Wave cycle 2: Tilt right
+      [0.10, 0.0, 0.38],  // Wave cycle 2: Tilt left
+      [0.10, 0.0, -0.38], // Wave cycle 3: Tilt right
+      [0.10, 0.0, 0.38],  // Wave cycle 3: Tilt left
+      [0.05, 0.0, 0.0],   // Center
+      [0.05, 0, 0],       // Lower to idle
     ]),
     // Left Arm relaxed at side
     createRelativeQuatTrack("LeftArm", restQuats, times, [
@@ -862,9 +875,9 @@ export function createWaveClip(
       [0, 0, 0.22],
       [0, 0, 0.22],
     ]),
-    // Fingers open during waving
+    // Fingers open and extended with splayed thumb during waving
     ...createFingerTracks("Right", restQuats, times, {
-      thumb: openWavingFingers,
+      thumb: openWavingThumb,
       index: openWavingFingers,
       middle: openWavingFingers,
       ring: openWavingFingers,
