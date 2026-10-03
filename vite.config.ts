@@ -9,6 +9,10 @@ export default defineConfig({
     tsconfigPaths(),
     tanstackStart({
       server: { entry: "server" },
+      prerender: {
+        enabled: true,
+        autoStaticPathsDiscovery: true,
+      },
     }),
     tailwindcss(),
     react(),
