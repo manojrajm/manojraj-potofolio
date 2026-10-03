@@ -281,7 +281,7 @@ function Experience() {
                 <span>ACTIVE ROLE • DYNA4CAST TECHNOLOGIES</span>
               </div>
               <div className="bento-meta-pill">
-                <span>2024 — PRESENT • COIMBATORE, TN</span>
+                <span>2026 March  — PRESENT • COIMBATORE, TN</span>
               </div>
             </div>
 
