@@ -222,7 +222,7 @@ export function HolographicGlobe({ radius = 1.75 }: { radius?: number }) {
 
       {/* 2. Global Connection Bézier Arcs */}
       {arcGeometries.map(({ geo, hub }, idx) => (
-        <line key={`arc-${hub.name}-${idx}`} geometry={geo}>
+        <line key={`arc-${hub.name}-${idx}`} {...({ geometry: geo } as Record<string, unknown>)}>
           <lineBasicMaterial
             color={hub.color}
             transparent
